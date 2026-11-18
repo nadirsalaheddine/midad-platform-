@@ -1,1 +1,0 @@
-# midad-platform-
