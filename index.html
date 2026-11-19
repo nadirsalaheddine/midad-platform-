@@ -876,15 +876,7 @@
         btnElement.classList.remove('border-transparent', 'bg-white/70', 'dark:bg-midad-darkBg/70');  
         btnElement.classList.add('border-midad-olive', 'bg-white', 'dark:bg-midad-darkBg', 'shadow-sm');  
     }  
-
-    // 6. Generate Mind Map via Gemini API with Timeout & Robust JSON Parsing  
-    async function generateMindMap() {  
-        const lessonText = document.getElementById('lesson-text-input').value.trim();  
-        const customInstruction = document.getElementById('custom-instruction-input').value.trim();  
-
-        if (!lessonText && !uploadedImageBase64) {  
-            showToast('من فضلك ارفع صورة الدرس من المعرض أو اكتب نصاً أولاً 🖼️✍️');  
-            return;  
+  
     // 6. Generate Mind Map via Gemini API (Clean Payload + Safe JSON Extraction)  
     async function generateMindMap() {  
         const lessonText = document.getElementById('lesson-text-input').value.trim();  
