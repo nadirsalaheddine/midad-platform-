@@ -203,11 +203,11 @@
 
     <!-- ==================== 2. TOP FLOATING iOS HEADER ==================== -->
     <header class="sticky top-3 z-40 px-3 sm:px-6 max-w-6xl mx-auto w-full">
-        <div class="ios-glass rounded-ios-lg shadow-ios px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+        <div class="ios-glass rounded-ios-lg shadow-ios px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
             <!-- Brand Logo & Name -->
-            <a href="#" onclick="switchTab('create'); return false;" class="flex items-center gap-3 group">
-                <div class="w-11 h-11 rounded-[18px] bg-gradient-to-br from-midad-sea/15 via-midad-olive/15 to-midad-blush/30 dark:from-midad-sky/20 dark:to-midad-blush/20 flex items-center justify-center border border-white/60 dark:border-white/10 group-hover:scale-105 transition-transform">
-                    <svg class="w-7 h-7" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <a href="#" onclick="switchTab('create'); return false;" class="flex items-center gap-2.5 group shrink-0">
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-[16px] sm:rounded-[18px] bg-gradient-to-br from-midad-sea/15 via-midad-olive/15 to-midad-blush/30 dark:from-midad-sky/20 dark:to-midad-blush/20 flex items-center justify-center border border-white/60 dark:border-white/10 group-hover:scale-105 transition-transform shrink-0">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M50 12C50 12 26 36 26 56C26 68 36 76 50 76C64 76 74 68 74 56C74 36 50 12 50 12Z" fill="#1E6091"/>
                         <path d="M50 12V46" stroke="#FAFAFA" stroke-width="4" stroke-linecap="round"/>
                         <circle cx="50" cy="51" r="5" fill="#F4C2C2"/>
@@ -215,9 +215,9 @@
                         <path d="M18 82C30 74 42 88 54 81C66 74 75 84 84 79" stroke="#87CEEB" stroke-width="6" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <div>
-                    <span class="text-xl sm:text-2xl font-black text-midad-chocolate dark:text-white tracking-tight block leading-none">مِـداد</span>
-                    <span class="text-[11px] font-bold text-midad-olive dark:text-midad-sky">رفيقك الذكي للتفوق</span>
+                <div class="shrink-0">
+                    <span class="text-lg sm:text-2xl font-black text-midad-chocolate dark:text-white tracking-tight block leading-none">مِـداد</span>
+                    <span class="text-[10px] sm:text-[11px] font-bold text-midad-olive dark:text-midad-sky whitespace-nowrap block mt-0.5">رفيقك الذكي للتفوق</span>
                 </div>
             </a>
 
@@ -233,21 +233,21 @@
             </nav>
 
             <!-- Right Actions: Dark Mode + Student Account Pill -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="toggleDarkMode()" aria-label="تبديل الوضع الليلي" class="w-10 h-10 rounded-full bg-midad-chocolate/5 dark:bg-white/10 hover:bg-midad-sky/25 flex items-center justify-center text-midad-chocolate dark:text-amber-300 transition-all">
-                    <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+                <button onclick="toggleDarkMode()" aria-label="تبديل الوضع الليلي" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-midad-chocolate/5 dark:bg-white/10 hover:bg-midad-sky/25 flex items-center justify-center text-midad-chocolate dark:text-amber-300 transition-all shrink-0">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
                     </svg>
-                    <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="5"/><path stroke-linecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
                     </svg>
                 </button>
 
-                <button onclick="openAuthModal()" id="student-profile-btn" class="flex items-center gap-2.5 pl-4 pr-2 py-1.5 rounded-full bg-gradient-to-l from-midad-olive to-midad-sea text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
-                    <div id="student-avatar" class="w-8 h-8 rounded-full bg-white/25 flex items-center justify-center font-black text-sm">
+                <button onclick="openAuthModal()" id="student-profile-btn" class="flex items-center gap-2 pl-3 pr-1.5 py-1 sm:pl-4 sm:pr-2 sm:py-1.5 rounded-full bg-gradient-to-l from-midad-olive to-midad-sea text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all min-w-0">
+                    <div id="student-avatar" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/25 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
                         🎓
                     </div>
-                    <span id="student-name-label" class="text-xs sm:text-sm font-bold truncate max-w-[110px]">حساب الطالب</span>
+                    <span id="student-name-label" class="text-xs sm:text-sm font-bold truncate max-w-[95px] sm:max-w-[140px]">حساب الطالب</span>
                 </button>
             </div>
         </div>
@@ -267,9 +267,9 @@
     <!-- ==================== 3. MAIN WORKSPACE CONTAINER ==================== -->
     <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-16">
 
-        <!-- Custom Toast Notification Banner -->
-        <div id="toast-box" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-3 px-6 py-3.5 rounded-full bg-midad-chocolate text-white dark:bg-midad-darkElevated dark:border dark:border-white/15 shadow-2xl text-sm font-bold transition-all max-w-[92vw] text-center">
-            <span id="toast-icon">✨</span>
+        <!-- Sleek Top iOS Dynamic Island Toast Notification -->
+        <div id="toast-box" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2.5 px-5 py-3 rounded-2xl bg-midad-chocolate/95 dark:bg-midad-darkElevated/95 text-white border border-white/15 backdrop-blur-xl shadow-2xl text-xs sm:text-sm font-bold transition-all w-max max-w-[92vw] leading-relaxed">
+            <span id="toast-icon" class="shrink-0 text-base">✨</span>
             <span id="toast-text">تم الحفظ بنجاح!</span>
         </div>
 
@@ -618,9 +618,9 @@
 
     <!-- ==================== JAVASCRIPT LOGIC & GEMINI API INTEGRATION ==================== -->
     <script>
-        // API Configuration (Runtime key injected automatically)
+        // API Configuration (Runtime key injected automatically in Canvas)
         const apiKey = "";
-        const GEMINI_MODEL = "gemini-2.5-flash";
+        const GEMINI_MODEL = "gemini-3-flash-preview";
 
         // App State
         let currentPalette = 'nature';
@@ -779,7 +779,7 @@
             document.getElementById('m-journal-badge').textContent = count;
         }
 
-        // 5. Image Compression via HTML5 Canvas (Max 1024px, JPEG 0.8 quality)
+        // 5. Image Compression via HTML5 Canvas (Max 800px, JPEG 0.72 quality for fast reliable mobile upload)
         function compressImageFile(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -788,7 +788,7 @@
                     const img = new Image();
                     img.onerror = () => reject(new Error('صيغة الصورة غير مدعومة'));
                     img.onload = function() {
-                        const MAX_WIDTH = 1024;
+                        const MAX_WIDTH = 800;
                         let targetW = img.width;
                         let targetH = img.height;
 
@@ -805,7 +805,7 @@
                         ctx.fillRect(0, 0, targetW, targetH);
                         ctx.drawImage(img, 0, 0, targetW, targetH);
 
-                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
                         resolve(compressedDataUrl);
                     };
                     img.src = e.target.result;
@@ -883,6 +883,14 @@
             if (!lessonText && !uploadedImageBase64) {
                 showToast('من فضلك ارفع صورة الدرس من المعرض أو اكتب نصاً أولاً 🖼️✍️');
                 return;
+        // 6. Generate Mind Map via Gemini API (Clean Payload + Safe JSON Extraction)
+        async function generateMindMap() {
+            const lessonText = document.getElementById('lesson-text-input').value.trim();
+            const customInstruction = document.getElementById('custom-instruction-input').value.trim();
+
+            if (!lessonText && !uploadedImageBase64) {
+                showToast('من فضلك ارفع صورة الدرس من المعرض أو اكتب نصاً أولاً 🖼️✍️');
+                return;
             }
 
             const loadingEl = document.getElementById('loading-state');
@@ -895,13 +903,26 @@
             generateBtn.classList.add('opacity-60');
 
             const systemPrompt = `أنت مساعد تعليمي عربي خبير في تصميم الخرائط الذهنية (Mind Maps) للطلاب بأسلوب بصري مبسط ومركز.
-مهمتك: قراءة محتوى الدرس من الصورة أو النص المرفق بدقة، وتطبيق توجيهات الطالب بدقة.
-قواعد التنسيق الإلزامية:
-1. أرجع النتيجة بصيغة JSON صالحة فقط بدون أي نص خارجي.
-2. ضع الكلمات المفتاحية والمصطلحات العلمية الهامة داخل قوسين مزدوجين هكذا [[الكلمة المفتاحية]] ليتم تسطيرها وتلوينها تلقائياً للطالب.
-3. قسّم الدرس إلى 3 إلى 6 فروع رئيسية واضحة، لكل فرع عنوان، لون مقترح (olive أو ocean أو sky أو chocolate أو blush)، نقاط مختصرة، ونصيحة ذهبية للتركيز في الامتحان (focusTip).`;
+مهمتك: قراءة محتوى الدرس من الصورة أو النص المرفق بدقة، وتطبيق توجيهات الطالب.
+قواعد الإخراج الإلزامية:
+- أرجع كائن JSON صالح فقط بدون أي نص إضافي قبله أو بعده.
+- ضع الكلمات المفتاحية والمصطلحات العلمية الهامة داخل قوسين مزدوجين هكذا [[الكلمة المفتاحية]] ليتم تسطيرها وتلوينها تلقائياً للطالب.
+- اتبع هذا الهيكل بالضبط:
+{
+  "title": "عنوان الدرس الرئيسي",
+  "summaryNote": "خلاصة مركزة للدرس في سطرين",
+  "branches": [
+    {
+      "heading": "عنوان الفرع",
+      "colorTheme": "olive",
+      "points": ["نقطة 1 مع [[كلمة مفتاحية]]", "نقطة 2"],
+      "focusTip": "نصيحة ذهبية للتركيز في الامتحان حول هذا الفرع"
+    }
+  ]
+}
+ملاحظة: اجعل عدد الفروع من 3 إلى 6 فروع، واستخدم للقيمة colorTheme إحدى القيم: olive, ocean, sky, chocolate, blush.`;
 
-            const userPrompt = `لخّص هذا الدرس في شكل خريطة ذهنية منظمة وجميلة باللغة العربية.
+            const userPrompt = `لخّص هذا الدرس في شكل خريطة ذهنية منظمة وجميلة باللغة العربية بصيغة JSON فقط.
 ${customInstruction ? `تعليمات الطالب الخاصة: ${customInstruction}` : ''}
 ${lessonText ? `نص الدرس:\n${lessonText}` : 'يرجى قراءة محتوى الدرس من الصورة المرفقة بدقة واستخراج الخريطة الذهنية منه.'}`;
 
@@ -917,34 +938,7 @@ ${lessonText ? `نص الدرس:\n${lessonText}` : 'يرجى قراءة محتو
 
             const payload = {
                 contents: [{ role: "user", parts: parts }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            title: { type: "STRING" },
-                            summaryNote: { type: "STRING" },
-                            branches: {
-                                type: "ARRAY",
-                                items: {
-                                    type: "OBJECT",
-                                    properties: {
-                                        heading: { type: "STRING" },
-                                        colorTheme: { type: "STRING" },
-                                        points: {
-                                            type: "ARRAY",
-                                            items: { type: "STRING" }
-                                        },
-                                        focusTip: { type: "STRING" }
-                                    },
-                                    required: ["heading", "colorTheme", "points", "focusTip"]
-                                }
-                            }
-                        },
-                        required: ["title", "summaryNote", "branches"]
-                    }
-                }
+                systemInstruction: { parts: [{ text: systemPrompt }] }
             };
 
             try {
@@ -952,7 +946,7 @@ ${lessonText ? `نص الدرس:\n${lessonText}` : 'يرجى قراءة محتو
                     `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
                     payload,
                     2,
-                    32000
+                    45000
                 );
 
                 const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -960,8 +954,14 @@ ${lessonText ? `نص الدرس:\n${lessonText}` : 'يرجى قراءة محتو
                     throw new Error("لم يتم استلام محتوى من الخادم");
                 }
 
-                const cleanedJson = rawText.replace(/```json\s*|```\s*/g, '').trim();
-                const parsedMap = JSON.parse(cleanedJson);
+                // Extract JSON object safely even if wrapped in markdown fences
+                const firstBrace = rawText.indexOf('{');
+                const lastBrace = rawText.lastIndexOf('}');
+                if (firstBrace === -1 || lastBrace === -1) {
+                    throw new Error("تنسيق الاستجابة غير صالح");
+                }
+                const jsonString = rawText.slice(firstBrace, lastBrace + 1);
+                const parsedMap = JSON.parse(jsonString);
 
                 if (!parsedMap.branches || !Array.isArray(parsedMap.branches) || parsedMap.branches.length === 0) {
                     throw new Error("بنية الخريطة غير مكتملة");
@@ -970,7 +970,7 @@ ${lessonText ? `نص الدرس:\n${lessonText}` : 'يرجى قراءة محتو
                 renderMindMap(parsedMap);
                 showToast('تم رسم خريطتك الذهنية بنجاح! 🌟');
             } catch (err) {
-                showToast('حدث تعثر مؤقت في الاتصال بالذكاء الاصطناعي. تأكد من الإنترنت أو وضوح الصورة وحاول مجدداً 🔄');
+                showToast('تعذر الاتصال بالخادم حالياً، يرجى إعادة المحاولة بعد لحظات 🔄');
             } finally {
                 loadingEl.classList.add('hidden');
                 generateBtn.disabled = false;
@@ -978,7 +978,7 @@ ${lessonText ? `نص الدرس:\n${lessonText}` : 'يرجى قراءة محتو
             }
         }
 
-        async function fetchWithTimeoutAndRetry(url, payload, maxRetries = 2, timeoutMs = 30000) {
+        async function fetchWithTimeoutAndRetry(url, payload, maxRetries = 2, timeoutMs = 45000) {
             let delay = 1000;
             for (let attempt = 0; attempt <= maxRetries; attempt++) {
                 const controller = new AbortController();
