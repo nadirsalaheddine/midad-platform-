@@ -154,7 +154,7 @@
 <body class="min-h-screen flex flex-col selection:bg-midad-blush selection:text-midad-chocolate">
 
     <!-- ==================== 1. SPLASH SCREEN ==================== -->
-    <div id="splash-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#FAFAFA] dark:bg-[#121212] transition-all duration-700">
+    <div id="splash-screen" onclick="dismissSplash()" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#FAFAFA] dark:bg-[#121212] transition-all duration-700 cursor-pointer">
         <!-- Ambient Organic Blobs -->
         <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-midad-sky/30 rounded-full blur-3xl animate-glow pointer-events-none"></div>
         <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-midad-olive/20 rounded-full blur-3xl animate-glow pointer-events-none"></div>
@@ -634,21 +634,27 @@
         let savedJournal = JSON.parse(localStorage.getItem('midad_student_journal')) || [];
 
         // 1. Splash Screen Lifecycle & Auto-Draft Restoration
-        window.addEventListener('DOMContentLoaded', () => {
+        function initApp() {
             const progress = document.getElementById('splash-progress');
             setTimeout(() => { if (progress) progress.style.width = '100%'; }, 150);
-            setTimeout(() => { dismissSplash(); }, 1800);
+            setTimeout(() => { dismissSplash(); }, 1600);
 
             updateProfileUI();
             renderJournal();
             restoreSavedDraft();
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
 
         function dismissSplash() {
             const splash = document.getElementById('splash-screen');
             if (splash && !splash.classList.contains('opacity-0')) {
                 splash.classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => splash.remove(), 700);
+                setTimeout(() => { if (splash.parentNode) splash.remove(); }, 650);
             }
         }
 
