@@ -1,1260 +1,1262 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مِـداد | منصة الخرائط الذهنية والتلخيص الذكي</title>
-    
-    <!-- Google Fonts: Cairo & Tajawal -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2canvas for High-Quality Mind Map PNG Export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Cairo', 'Tajawal', 'sans-serif'],
-                    },
-                    colors: {
-                        midad: {
-                            cream: '#FAFAFA',
-                            chocolate: '#4E342E',
-                            olive: '#556B2F',
-                            oliveLight: '#738F41',
-                            sky: '#87CEEB',
-                            sea: '#1E6091',
-                            blush: '#F4C2C2',
-                            blushDeep: '#E5989B',
-                            darkBg: '#121212',
-                            darkCard: '#1E1E1E',
-                            darkElevated: '#262626'
-                        }
-                    },
-                    borderRadius: {
-                        'ios': '26px',
-                        'ios-lg': '32px',
-                        'ios-xl': '40px',
-                    },
-                    boxShadow: {
-                        'ios': '0 10px 30px -5px rgba(78, 52, 46, 0.08), 0 4px 12px -2px rgba(78, 52, 46, 0.04)',
-                        'ios-hover': '0 20px 40px -10px rgba(30, 96, 145, 0.14), 0 8px 16px -4px rgba(85, 107, 47, 0.08)',
-                        'ios-dark': '0 12px 32px -4px rgba(0, 0, 0, 0.45)',
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #FAFAFA;
-            color: #4E342E;
-            overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-        html.dark body {
-            background-color: #121212;
-            color: #F5F5F4;
-        }
-
-        /* Glassmorphism iOS Effects */
-        .ios-glass {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
-        html.dark .ios-glass {
-            background: rgba(30, 30, 30, 0.82);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* Custom Keyword Underline & Highlight Markers */
-        .keyword-blush {
-            background: linear-gradient(120deg, rgba(244, 194, 194, 0.45) 0%, rgba(244, 194, 194, 0.8) 100%);
-            border-bottom: 3px solid #E5989B;
-            padding: 1px 7px;
-            border-radius: 9px;
-            font-weight: 800;
-            color: #4E342E;
-            display: inline-block;
-            margin: 1px 2px;
-        }
-        html.dark .keyword-blush {
-            background: rgba(244, 194, 194, 0.22);
-            border-bottom: 3px solid #F4C2C2;
-            color: #FFE4E6;
-        }
-
-        .keyword-sky {
-            background: linear-gradient(120deg, rgba(135, 206, 235, 0.35) 0%, rgba(135, 206, 235, 0.65) 100%);
-            border-bottom: 3px solid #1E6091;
-            padding: 1px 7px;
-            border-radius: 9px;
-            font-weight: 800;
-            color: #1E6091;
-            display: inline-block;
-            margin: 1px 2px;
-        }
-        html.dark .keyword-sky {
-            background: rgba(135, 206, 235, 0.2);
-            border-bottom: 3px solid #87CEEB;
-            color: #BAE6FD;
-        }
-
-        /* Smooth Floating & Splash Animations */
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(1.5deg); }
-        }
-        .animate-float {
-            animation: floatSlow 4.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.55; transform: scale(1); }
-            50% { opacity: 0.85; transform: scale(1.06); }
-        }
-        .animate-glow {
-            animation: pulseGlow 3.5s ease-in-out infinite;
-        }
-
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(18px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .animate-card {
-            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 7px; height: 7px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(85, 107, 47, 0.3); border-radius: 99px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(30, 96, 145, 0.5); }
-
-        /* Mind Map Subtle Dot Pattern Background */
-        .mindmap-grid {
-            background-image: radial-gradient(rgba(78, 52, 46, 0.11) 1.2px, transparent 1.2px);
-            background-size: 22px 22px;
-        }
-        html.dark .mindmap-grid {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col selection:bg-midad-blush selection:text-midad-chocolate">
-
-    <!-- ==================== 1. SPLASH SCREEN ==================== -->
-    <div id="splash-screen" onclick="dismissSplash()" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#FAFAFA] dark:bg-[#121212] transition-all duration-700 cursor-pointer">
-        <!-- Ambient Organic Blobs -->
-        <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-midad-sky/30 rounded-full blur-3xl animate-glow pointer-events-none"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-midad-olive/20 rounded-full blur-3xl animate-glow pointer-events-none"></div>
-        <div class="absolute top-1/3 right-1/3 w-64 h-64 bg-midad-blush/35 rounded-full blur-3xl animate-glow pointer-events-none"></div>
-
-        <div class="relative z-10 flex flex-col items-center text-center px-6 animate-card">
-            <!-- Custom Midad SVG Emblem (Fountain Pen Nib + Olive Leaf + Sea Wave) -->
-            <div class="w-28 h-28 rounded-[34px] ios-glass shadow-ios flex items-center justify-center mb-6 animate-float border-2 border-white/80 dark:border-white/10">
-                <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="midadSplashGrad" x1="15" y1="10" x2="85" y2="90" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#1E6091"/>
-                            <stop offset="50%" stop-color="#556B2F"/>
-                            <stop offset="100%" stop-color="#4E342E"/>
-                        </linearGradient>
-                        <linearGradient id="waveGrad" x1="20" y1="65" x2="85" y2="85" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#87CEEB"/>
-                            <stop offset="100%" stop-color="#F4C2C2"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M50 12C50 12 26 36 26 56C26 68 36 76 50 76C64 76 74 68 74 56C74 36 50 12 50 12Z" fill="url(#midadSplashGrad)"/>
-                    <path d="M50 12V46" stroke="#FAFAFA" stroke-width="3.5" stroke-linecap="round"/>
-                    <circle cx="50" cy="51" r="5" fill="#F4C2C2"/>
-                    <path d="M24 44C14 42 10 32 16 24C24 26 28 34 24 44Z" fill="#556B2F" opacity="0.85"/>
-                    <path d="M18 82C30 74 42 88 54 81C66 74 75 84 84 79" stroke="url(#waveGrad)" stroke-width="5.5" stroke-linecap="round"/>
-                </svg>
-            </div>
-
-            <h1 class="text-5xl font-black tracking-tight bg-gradient-to-l from-midad-sea via-midad-olive to-midad-chocolate dark:from-midad-sky dark:via-emerald-300 dark:to-midad-blush bg-clip-text text-transparent mb-2">
-                مِـداد
-            </h1>
-            <p class="text-base sm:text-lg font-semibold text-midad-chocolate/75 dark:text-stone-300 max-w-md mb-8">
-                حيث تتحول دروسك إلى خرائط ذهنية نابضة بالحياة والتركيز ✨🌿
-            </p>
-
-            <!-- Loading Bar -->
-            <div class="w-48 h-2 bg-midad-chocolate/10 dark:bg-white/10 rounded-full overflow-hidden mb-5">
-                <div id="splash-progress" class="h-full bg-gradient-to-l from-midad-sea via-midad-olive to-midad-blushDeep rounded-full transition-all duration-1000 ease-out" style="width: 15%"></div>
-            </div>
-
-            <button onclick="dismissSplash()" class="text-xs font-bold px-5 py-2.5 rounded-full bg-white/80 dark:bg-white/10 hover:bg-midad-blush/30 text-midad-chocolate dark:text-stone-200 transition-all shadow-sm">
-                دخول سريع للمنصة ←
-            </button>
-        </div>
-    </div>
-
-    <!-- ==================== 2. TOP FLOATING iOS HEADER ==================== -->
-    <header class="sticky top-3 z-40 px-3 sm:px-6 max-w-6xl mx-auto w-full">
-        <div class="ios-glass rounded-ios-lg shadow-ios px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
-            <!-- Brand Logo & Name -->
-            <a href="#" onclick="switchTab('create'); return false;" class="flex items-center gap-2.5 group shrink-0">
-                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-[16px] sm:rounded-[18px] bg-gradient-to-br from-midad-sea/15 via-midad-olive/15 to-midad-blush/30 dark:from-midad-sky/20 dark:to-midad-blush/20 flex items-center justify-center border border-white/60 dark:border-white/10 group-hover:scale-105 transition-transform shrink-0">
-                    <svg class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M50 12C50 12 26 36 26 56C26 68 36 76 50 76C64 76 74 68 74 56C74 36 50 12 50 12Z" fill="#1E6091"/>
-                        <path d="M50 12V46" stroke="#FAFAFA" stroke-width="4" stroke-linecap="round"/>
-                        <circle cx="50" cy="51" r="5" fill="#F4C2C2"/>
-                        <path d="M24 44C14 42 10 32 16 24C24 26 28 34 24 44Z" fill="#556B2F"/>
-                        <path d="M18 82C30 74 42 88 54 81C66 74 75 84 84 79" stroke="#87CEEB" stroke-width="6" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="shrink-0">
-                    <span class="text-lg sm:text-2xl font-black text-midad-chocolate dark:text-white tracking-tight block leading-none">مِـداد</span>
-                    <span class="text-[10px] sm:text-[11px] font-bold text-midad-olive dark:text-midad-sky whitespace-nowrap block mt-0.5">رفيقك الذكي للتفوق</span>
-                </div>
-            </a>
-
-            <!-- Navigation Pills (Workspace vs Student Journal) -->
-            <nav class="hidden md:flex items-center bg-midad-chocolate/5 dark:bg-white/5 p-1.5 rounded-full">
-                <button id="nav-create" onclick="switchTab('create')" class="px-5 py-2 rounded-full text-sm font-bold transition-all bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-sm">
-                    ✨ صانع الخرائط
-                </button>
-                <button id="nav-journal" onclick="switchTab('journal')" class="px-5 py-2 rounded-full text-sm font-bold transition-all text-midad-chocolate/70 dark:text-stone-300 hover:text-midad-chocolate flex items-center gap-2">
-                    <span>🗂️ يومياتي وسلتي</span>
-                    <span id="journal-badge" class="px-2 py-0.5 text-xs rounded-full bg-midad-blush/60 text-midad-chocolate font-extrabold">0</span>
-                </button>
-            </nav>
-
-            <!-- Right Actions: Dark Mode + Student Account Pill -->
-            <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
-                <button onclick="toggleDarkMode()" aria-label="تبديل الوضع الليلي" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-midad-chocolate/5 dark:bg-white/10 hover:bg-midad-sky/25 flex items-center justify-center text-midad-chocolate dark:text-amber-300 transition-all shrink-0">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-                    </svg>
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="5"/><path stroke-linecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                    </svg>
-                </button>
-
-                <button onclick="openAuthModal()" id="student-profile-btn" class="flex items-center gap-2 pl-3 pr-1.5 py-1 sm:pl-4 sm:pr-2 sm:py-1.5 rounded-full bg-gradient-to-l from-midad-olive to-midad-sea text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all min-w-0">
-                    <div id="student-avatar" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/25 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
-                        🎓
-                    </div>
-                    <span id="student-name-label" class="text-xs sm:text-sm font-bold truncate max-w-[95px] sm:max-w-[140px]">حساب الطالب</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Sub Navigation Bar -->
-        <div class="flex md:hidden items-center justify-center gap-2 mt-2.5">
-            <button id="m-nav-create" onclick="switchTab('create')" class="flex-1 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-ios">
-                ✨ صانع الخرائط
-            </button>
-            <button id="m-nav-journal" onclick="switchTab('journal')" class="flex-1 py-2.5 rounded-full text-xs font-extrabold ios-glass text-midad-chocolate dark:text-stone-200 flex items-center justify-center gap-1.5">
-                <span>🗂️ يومياتي وسلتي</span>
-                <span id="m-journal-badge" class="px-2 py-0.5 text-[11px] rounded-full bg-midad-blush text-midad-chocolate font-black">0</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- ==================== 3. MAIN WORKSPACE CONTAINER ==================== -->
-    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-16">
-
-        <!-- Sleek Top iOS Dynamic Island Toast Notification -->
-        <div id="toast-box" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2.5 px-5 py-3 rounded-2xl bg-midad-chocolate/95 dark:bg-midad-darkElevated/95 text-white border border-white/15 backdrop-blur-xl shadow-2xl text-xs sm:text-sm font-bold transition-all w-max max-w-[92vw] leading-relaxed">
-            <span id="toast-icon" class="shrink-0 text-base">✨</span>
-            <span id="toast-text">تم الحفظ بنجاح!</span>
-        </div>
-
-        <!-- ==================== TAB 1: MIND MAP CREATOR ==================== -->
-        <section id="tab-create" class="space-y-8 animate-card">
-            
-            <!-- Hero Welcome Banner (Clean, authentic, without sample lesson button) -->
-            <div class="relative overflow-hidden rounded-ios-xl p-6 sm:p-8 bg-gradient-to-bl from-midad-sky/25 via-white to-midad-blush/30 dark:from-midad-sea/25 dark:via-midad-darkCard dark:to-midad-olive/20 border border-white/80 dark:border-white/10 shadow-ios">
-                <div class="relative z-10 space-y-2.5 max-w-3xl">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-midad-olive/15 dark:bg-midad-olive/30 text-midad-olive dark:text-emerald-300 text-xs font-extrabold">
-                        <span>🌿</span>
-                        <span>مساحة الدراسة الذكية • حفظ تلقائي لمسودتك</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-midad-chocolate dark:text-white leading-snug">
-                        أهلاً بك <span id="hero-student-name" class="text-midad-sea dark:text-midad-sky">يا بطل</span>! ارفع صورة درسك أو اكتبه ودع «مِداد» يرسم لك خريطة التفوق 🎨
-                    </h2>
-                    <p class="text-sm sm:text-base text-midad-chocolate/75 dark:text-stone-300 font-medium leading-relaxed">
-                        اختر صورة من معرض هاتفك أو التقطها بالكاميرا، أو اكتب نص الدرس مباشرة، وسأحوله إلى خريطة ذهنية ملونة ومسطّرة تحت أهم المصطلحات.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Input Studio Card -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <!-- Left/Main Column: Lesson Input (7 cols) -->
-                <div class="lg:col-span-7 ios-glass rounded-ios-xl p-6 sm:p-7 shadow-ios space-y-5">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-black text-midad-chocolate dark:text-white flex items-center gap-2">
-                            <span class="w-8 h-8 rounded-full bg-midad-sky/30 text-midad-sea dark:text-midad-sky flex items-center justify-center text-sm">1</span>
-                            <span>أدخل محتوى درسك</span>
-                        </h3>
-                        <button type="button" onclick="clearInputs()" class="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline">
-                            مسح الكل 🗑️
-                        </button>
-                    </div>
-
-                    <!-- Dual Image Input Box: Gallery vs Camera (Safe & Reliable on Mobile) -->
-                    <div class="rounded-ios-lg p-5 bg-white/70 dark:bg-midad-darkBg/60 border-2 border-dashed border-midad-sea/35 dark:border-midad-sky/30 space-y-4">
-                        <!-- Hidden File Inputs -->
-                        <input type="file" id="gallery-image-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                        <input type="file" id="camera-image-input" accept="image/*" capture="environment" class="hidden" onchange="handleImageUpload(event)">
-
-                        <div id="upload-placeholder" class="text-center space-y-3 py-1">
-                            <div class="w-14 h-14 mx-auto rounded-[22px] bg-gradient-to-tr from-midad-sky/30 to-midad-blush/40 flex items-center justify-center text-midad-sea dark:text-midad-sky">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                            </div>
-                            <p class="text-sm font-extrabold text-midad-chocolate dark:text-white">
-                                أرفق صورة صفحة الكراس أو الكتاب
-                            </p>
-                            <p class="text-xs text-midad-chocolate/65 dark:text-stone-400">
-                                اختر صورة جاهزة من المعرض مباشرة دون مغادرة الصفحة، أو التقط صورة جديدة
-                            </p>
-
-                            <!-- Two Clear iOS Buttons -->
-                            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                                <button type="button" onclick="document.getElementById('gallery-image-input').click()" class="w-full sm:w-auto flex-1 py-3 px-5 rounded-full bg-gradient-to-l from-midad-sea to-midad-olive text-white text-xs sm:text-sm font-extrabold shadow-md hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-2">
-                                    <span>🖼️</span>
-                                    <span>رفع صورة من المعرض</span>
-                                </button>
-                                <button type="button" onclick="document.getElementById('camera-image-input').click()" class="w-full sm:w-auto flex-1 py-3 px-5 rounded-full bg-white dark:bg-midad-darkElevated border border-midad-chocolate/15 dark:border-white/15 text-midad-chocolate dark:text-white text-xs sm:text-sm font-extrabold shadow-sm hover:bg-midad-blush/25 active:scale-95 transition-all flex items-center justify-center gap-2">
-                                    <span>📸</span>
-                                    <span>التقاط بالكاميرا</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Image Preview Container -->
-                        <div id="image-preview-wrapper" class="hidden relative text-center">
-                            <img id="image-preview" src="" alt="معاينة الدرس" class="max-h-64 mx-auto rounded-ios object-contain shadow-md border border-white/80 dark:border-white/10">
-                            <div class="flex items-center justify-center gap-2 mt-3">
-                                <span id="image-size-badge" class="px-3 py-1 rounded-full bg-midad-olive/15 text-midad-olive dark:text-emerald-300 text-[11px] font-bold">
-                                    ✓ صورة جاهزة للتحليل
-                                </span>
-                                <button type="button" onclick="removeUploadedImage()" class="px-3.5 py-1 rounded-full bg-rose-500 text-white text-xs font-bold shadow-sm hover:bg-rose-600 transition-colors">
-                                    حذف الصورة ✕
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Direct Text Input with Auto-Save -->
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label class="text-xs font-extrabold text-midad-chocolate/80 dark:text-stone-300">
-                                أو اكتب / ألصق نص الدرس هنا مباشرة ✍️:
-                            </label>
-                            <span id="autosave-indicator" class="text-[11px] font-bold text-midad-olive dark:text-emerald-400 opacity-0 transition-opacity">
-                                ✓ محفوظ تلقائياً
-                            </span>
-                        </div>
-                        <textarea id="lesson-text-input" rows="5" oninput="autoSaveDraft()" placeholder="اكتب فقرات درسك هنا... يتم حفظ مسودتك تلقائياً في المتصفح حتى لا يضيع حرف واحد 🌿" class="w-full rounded-ios bg-white/95 dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 p-4 text-sm font-medium text-midad-chocolate dark:text-white placeholder:text-midad-chocolate/40 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-midad-sea transition-all resize-none"></textarea>
-                    </div>
-                </div>
-
-                <!-- Right Column: Instructions & Palette Selection (5 cols) -->
-                <div class="lg:col-span-5 ios-glass rounded-ios-xl p-6 sm:p-7 shadow-ios flex flex-col justify-between space-y-5">
-                    <div class="space-y-5">
-                        <h3 class="text-lg font-black text-midad-chocolate dark:text-white flex items-center gap-2">
-                            <span class="w-8 h-8 rounded-full bg-midad-blush/50 text-midad-chocolate flex items-center justify-center text-sm">2</span>
-                            <span>توجيهاتك الذكية & الألوان</span>
-                        </h3>
-
-                        <!-- Lightweight Student Instruction -->
-                        <div>
-                            <label class="block text-xs font-extrabold text-midad-chocolate/80 dark:text-stone-300 mb-2">
-                                ملاحظة خفيفة لمِداد (اختياري) 💬:
-                            </label>
-                            <input type="text" id="custom-instruction-input" oninput="autoSaveDraft()" placeholder="مثال: لخص الجزء الأول فقط واحذف الأمثلة الطويلة..." class="w-full rounded-ios bg-white/95 dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 px-4 py-3 text-sm font-medium text-midad-chocolate dark:text-white placeholder:text-midad-chocolate/40 focus:outline-none focus:ring-2 focus:ring-midad-olive transition-all">
-                            
-                            <!-- Quick Suggestion Chips -->
-                            <div class="flex flex-wrap gap-1.5 mt-2.5">
-                                <button type="button" onclick="setInstruction('لخص بأسلوب مختصر جداً وركز على التعاريف')" class="text-[11px] font-bold px-3 py-1 rounded-full bg-midad-olive/10 dark:bg-midad-olive/25 text-midad-olive dark:text-emerald-300 hover:bg-midad-olive/20 transition-colors">
-                                    + ركز على التعاريف
-                                </button>
-                                <button type="button" onclick="setInstruction('احذف الأمثلة الطويلة واستخرج العناصر الأساسية فقط')" class="text-[11px] font-bold px-3 py-1 rounded-full bg-midad-sea/10 dark:bg-midad-sky/20 text-midad-sea dark:text-midad-sky hover:bg-midad-sea/20 transition-colors">
-                                    + احذف الأمثلة الطويلة
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Aesthetic Nature & Sea Palette Selector -->
-                        <div>
-                            <label class="block text-xs font-extrabold text-midad-chocolate/80 dark:text-stone-300 mb-2.5">
-                                اختر طابع ألوان الخريطة الذهنية 🎨:
-                            </label>
-                            <div class="grid grid-cols-2 gap-2.5" id="palette-selector">
-                                <button type="button" onclick="selectPalette('nature', this)" class="palette-btn active flex items-center gap-2.5 p-3 rounded-ios bg-white dark:bg-midad-darkBg border-2 border-midad-olive shadow-sm text-right transition-all">
-                                    <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#556B2F] to-[#87CEEB] shrink-0"></span>
-                                    <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">طبيعة وبحر 🌿</span>
-                                </button>
-                                <button type="button" onclick="selectPalette('blush', this)" class="palette-btn flex items-center gap-2.5 p-3 rounded-ios bg-white/70 dark:bg-midad-darkBg/70 border-2 border-transparent hover:border-midad-blushDeep text-right transition-all">
-                                    <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#4E342E] to-[#F4C2C2] shrink-0"></span>
-                                    <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">شوكولا وبلوش 🌸</span>
-                                </button>
-                                <button type="button" onclick="selectPalette('sea', this)" class="palette-btn flex items-center gap-2.5 p-3 rounded-ios bg-white/70 dark:bg-midad-darkBg/70 border-2 border-transparent hover:border-midad-sea text-right transition-all">
-                                    <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#1E6091] to-[#87CEEB] shrink-0"></span>
-                                    <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">أزرق سماوي 🌊</span>
-                                </button>
-                                <button type="button" onclick="selectPalette('royal', this)" class="palette-btn flex items-center gap-2.5 p-3 rounded-ios bg-white/70 dark:bg-midad-darkBg/70 border-2 border-transparent hover:border-amber-600 text-right transition-all">
-                                    <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#121212] via-[#556B2F] to-[#F4C2C2] shrink-0"></span>
-                                    <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">تباين فخم ✨</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Primary Action Generate Button -->
-                    <button id="generate-btn" onclick="generateMindMap()" class="w-full py-4 px-6 rounded-ios-lg bg-gradient-to-l from-midad-sea via-midad-olive to-midad-chocolate hover:opacity-95 text-white font-black text-base shadow-lg hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
-                        </svg>
-                        <span>حوّل الدرس إلى خريطة ذهنية</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- ==================== LOADING STATE ==================== -->
-            <div id="loading-state" class="hidden ios-glass rounded-ios-xl p-10 text-center shadow-ios space-y-4 animate-card">
-                <div class="w-20 h-20 mx-auto rounded-[28px] bg-gradient-to-tr from-midad-sky/30 via-midad-olive/20 to-midad-blush/40 flex items-center justify-center">
-                    <svg class="w-10 h-10 text-midad-sea dark:text-midad-sky animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </div>
-                <h4 class="text-xl font-black text-midad-chocolate dark:text-white">مِداد يقرأ درسك ويرسم خريطتك الذهنية... 🖋️✨</h4>
-                <p class="text-sm text-midad-chocolate/70 dark:text-stone-300 max-w-md mx-auto">
-                    نقوم الآن باستخراج الكلمات المفتاحية، تسطير المصطلحات الهامة، وتحديد نقاط التركيز للاختبار.
-                </p>
-            </div>
-
-            <!-- ==================== 4. MIND MAP OUTPUT CANVAS ==================== -->
-            <div id="mindmap-result-section" class="hidden space-y-6 animate-card">
-                
-                <!-- Motivational Banner -->
-                <div class="rounded-ios-lg p-5 sm:p-6 bg-gradient-to-l from-midad-olive to-midad-sea text-white shadow-ios flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-4 text-center sm:text-right">
-                        <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shrink-0">
-                            🎓
-                        </div>
-                        <div>
-                            <h4 class="font-black text-base sm:text-lg">
-                                ها هي خريطتك الذهنية جاهزة! قم بكتابتها في كراسك، احفظها، وادرسها جيداً.. النجاح ينتظرك! ✨
-                            </h4>
-                            <p id="map-encouragement-sub" class="text-xs sm:text-sm text-white/90 mt-0.5">
-                                الكلمات المسطّرة بالألوان هي مفاتيح الإجابة النموذجية في الامتحان.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons: Save to Journal & Download PNG -->
-                    <div class="flex items-center gap-2.5 shrink-0">
-                        <button onclick="saveCurrentMapToJournal()" class="px-4 py-2.5 rounded-full bg-white text-midad-chocolate hover:bg-midad-blush font-extrabold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all active:scale-95">
-                            <span>🗂️</span>
-                            <span>حفظ في يومياتي</span>
-                        </button>
-                        <button onclick="downloadMindMapAsImage()" class="px-4 py-2.5 rounded-full bg-midad-chocolate text-white hover:bg-midad-chocolate/90 font-extrabold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all active:scale-95">
-                            <span>📥</span>
-                            <span>تحميل كصورة PNG</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Visual Mind Map Board -->
-                <div id="mindmap-board" class="relative rounded-ios-xl mindmap-grid bg-white dark:bg-midad-darkCard border-2 border-midad-chocolate/10 dark:border-white/10 p-6 sm:p-10 shadow-ios overflow-hidden">
-                    
-                    <!-- Watermark Emblem Top -->
-                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-midad-chocolate/10 dark:border-white/10">
-                        <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-midad-blushDeep"></span>
-                            <span class="w-3 h-3 rounded-full bg-midad-sky"></span>
-                            <span class="w-3 h-3 rounded-full bg-midad-olive"></span>
-                            <span id="map-date-stamp" class="text-xs font-bold text-midad-chocolate/60 dark:text-stone-400 mr-2"></span>
-                        </div>
-                        <div class="flex items-center gap-1.5 text-xs font-black text-midad-sea dark:text-midad-sky">
-                            <span>مِـداد • خريطة ذهنية</span>
-                            <span>🖋️</span>
-                        </div>
-                    </div>
-
-                    <!-- Central Core Node -->
-                    <div class="flex flex-col items-center text-center mb-8 relative z-10">
-                        <div id="central-node-card" class="max-w-2xl w-full rounded-ios-xl p-6 sm:p-7 bg-gradient-to-br from-midad-sea to-midad-olive text-white shadow-xl border-4 border-white dark:border-midad-darkElevated">
-                            <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-[11px] font-extrabold mb-2">
-                                الموضوع الرئيسي للدرس 🎯
-                            </span>
-                            <h2 id="map-main-title" class="text-2xl sm:text-3xl font-black mb-2 leading-snug">
-                                عنوان الدرس
-                            </h2>
-                            <p id="map-central-summary" class="text-xs sm:text-sm text-white/95 font-medium leading-relaxed">
-                                ملخص الفكرة المحورية للدرس...
-                            </p>
-                        </div>
-
-                        <!-- Decorative SVG Connector Trunk -->
-                        <svg class="w-full max-w-3xl h-12 text-midad-sea/40 dark:text-midad-sky/40" viewBox="0 0 600 50" fill="none" preserveAspectRatio="none">
-                            <path d="M300 0 V22" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M90 48 C90 22, 300 22, 300 22 C300 22, 510 22, 510 48" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M300 22 V48" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-
-                    <!-- Branches Grid -->
-                    <div id="map-branches-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 relative z-10">
-                        <!-- Dynamically Populated Mind Map Branch Cards -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== TAB 2: STUDENT JOURNAL & BASKET ==================== -->
-        <section id="tab-journal" class="hidden space-y-6 animate-card">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 ios-glass rounded-ios-xl p-6 shadow-ios">
-                <div>
-                    <h2 class="text-2xl font-black text-midad-chocolate dark:text-white flex items-center gap-2.5">
-                        <span>🗂️ يومياتي وسلة ملخصاتي</span>
-                    </h2>
-                    <p class="text-sm text-midad-chocolate/70 dark:text-stone-300 mt-1">
-                        كل خرائطك الذهنية محفوظة هنا مرتبة بالتاريخ لتعود إليها وتراجعها في أي وقت.
-                    </p>
-                </div>
-                <button onclick="switchTab('create')" class="px-5 py-3 rounded-full bg-gradient-to-l from-midad-sea to-midad-olive text-white font-extrabold text-sm shadow-md hover:opacity-95 transition-all self-start sm:self-auto">
-                    + إنشاء خريطة جديدة
-                </button>
-            </div>
-
-            <!-- Saved Mind Maps Grid -->
-            <div id="journal-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <!-- Populated dynamically -->
-            </div>
-
-            <!-- Empty Journal State -->
-            <div id="journal-empty-state" class="hidden ios-glass rounded-ios-xl p-12 text-center shadow-ios space-y-4">
-                <div class="w-20 h-20 mx-auto rounded-[28px] bg-midad-sky/20 text-midad-sea dark:text-midad-sky flex items-center justify-center text-4xl">
-                    📓
-                </div>
-                <h3 class="text-xl font-black text-midad-chocolate dark:text-white">سلة يومياتك فارغة حالياً</h3>
-                <p class="text-sm text-midad-chocolate/70 dark:text-stone-400 max-w-md mx-auto">
-                    ابدأ بتلخيص أول درس لك الآن، واضغط على «حفظ في يومياتي» لبناء مكتبتك الدراسية الخاصة!
-                </p>
-                <button onclick="switchTab('create')" class="px-6 py-3 rounded-full bg-midad-olive text-white font-extrabold text-sm shadow-md">
-                    ابدأ أول ملخص الآن ✨
-                </button>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- ==================== 5. STUDENT AUTH MODAL (iOS Style) ==================== -->
-    <div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/45 backdrop-blur-sm">
-        <div class="ios-glass bg-white dark:bg-midad-darkCard rounded-ios-xl max-w-md w-full p-7 shadow-2xl border border-white/80 dark:border-white/10 space-y-6 animate-card relative">
-            <button onclick="closeAuthModal()" class="absolute top-5 left-5 w-9 h-9 rounded-full bg-midad-chocolate/10 dark:bg-white/10 flex items-center justify-center text-midad-chocolate dark:text-white font-bold hover:bg-rose-500 hover:text-white transition-colors">
-                ✕
-            </button>
-
-            <div class="text-center space-y-2">
-                <div class="w-16 h-16 mx-auto rounded-[24px] bg-gradient-to-tr from-midad-sea/20 via-midad-olive/20 to-midad-blush/40 flex items-center justify-center text-3xl">
-                    🎓
-                </div>
-                <h3 class="text-2xl font-black text-midad-chocolate dark:text-white">فضاء الطالب في مِـداد</h3>
-                <p class="text-xs sm:text-sm text-midad-chocolate/70 dark:text-stone-300">
-                    سجّل اسمك وبريدك لحفظ يومياتك وخرائطك الذهنية باسمك، أو ادخل كزائر بنقرة واحدة.
-                </p>
-            </div>
-
-            <form onsubmit="handleStudentLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-extrabold text-midad-chocolate dark:text-stone-200 mb-1.5">الاسم الكامل أو اللقب الدراسي ✨</label>
-                    <input type="text" id="auth-name-input" required placeholder="مثال: سارة بن علي / أمين..." class="w-full rounded-ios bg-midad-cream dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 px-4 py-3 text-sm font-bold text-midad-chocolate dark:text-white focus:outline-none focus:ring-2 focus:ring-midad-sea">
-                </div>
-                <div>
-                    <label class="block text-xs font-extrabold text-midad-chocolate dark:text-stone-200 mb-1.5">البريد الإلكتروني أو المستوى الدراسي (اختياري) 📧</label>
-                    <input type="text" id="auth-email-input" placeholder="مثال: student@email.com أو بكالوريا..." class="w-full rounded-ios bg-midad-cream dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 px-4 py-3 text-sm font-medium text-midad-chocolate dark:text-white focus:outline-none focus:ring-2 focus:ring-midad-olive">
-                </div>
-                <button type="submit" class="w-full py-3.5 rounded-ios bg-gradient-to-l from-midad-sea to-midad-olive text-white font-black text-sm shadow-lg hover:opacity-95 transition-all">
-                    حفظ الدخول وتخصيص حسابي 🚀
-                </button>
-                <button type="button" onclick="continueAsGuest()" class="w-full py-2.5 rounded-ios bg-midad-chocolate/5 dark:bg-white/5 text-midad-chocolate/80 dark:text-stone-300 font-bold text-xs hover:bg-midad-chocolate/10 transition-all">
-                    المتابعة كزائر سريع ✨
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==================== 6. OFFICIAL CREATOR FOOTER ==================== -->
-    <footer class="mt-auto py-8 px-4 border-t border-midad-chocolate/10 dark:border-white/10 bg-white/50 dark:bg-midad-darkCard/50 backdrop-blur-md">
-        <div class="max-w-6xl mx-auto flex flex-col items-center justify-center text-center space-y-3">
-            <div class="flex items-center gap-2">
-                <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 12C50 12 26 36 26 56C26 68 36 76 50 76C64 76 74 68 74 56C74 36 50 12 50 12Z" fill="#556B2F"/>
-                    <circle cx="50" cy="51" r="5" fill="#F4C2C2"/>
-                    <path d="M18 82C30 74 42 88 54 81C66 74 75 84 84 79" stroke="#1E6091" stroke-width="6" stroke-linecap="round"/>
-                </svg>
-                <span class="font-black text-base text-midad-chocolate dark:text-white">منصة مِـداد التعليمية</span>
-            </div>
-
-            <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-l from-midad-blush/30 via-white to-midad-sky/25 dark:from-midad-olive/20 dark:via-midad-darkElevated dark:to-midad-sea/20 border border-midad-chocolate/10 dark:border-white/10 shadow-sm">
-                <span class="text-xs sm:text-sm font-extrabold text-midad-chocolate dark:text-stone-200">
-                    صُمّم وابتُكر من طرف: <span class="text-midad-sea dark:text-midad-sky font-black">نذير صلاح الدين أبحري</span> ✨
-                </span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- ==================== JAVASCRIPT LOGIC & GEMINI API INTEGRATION ==================== -->
-    <script>
-        // API Configuration (Runtime key injected automatically in Canvas)
-        const apiKey = "";
-        const GEMINI_MODEL = "gemini-3-flash-preview";
-
-        // App State
-        let currentPalette = 'nature';
-        let uploadedImageBase64 = null;
-        let uploadedImageMime = 'image/jpeg';
-        let currentGeneratedMap = null;
-        let studentProfile = JSON.parse(localStorage.getItem('midad_student_profile')) || {
-            name: 'طالب مِداد',
-            email: ''
-        };
-        let savedJournal = JSON.parse(localStorage.getItem('midad_student_journal')) || [];
-
-        // 1. Splash Screen Lifecycle & Auto-Draft Restoration
-        function initApp() {
-            const progress = document.getElementById('splash-progress');
-            setTimeout(() => { if (progress) progress.style.width = '100%'; }, 150);
-            setTimeout(() => { dismissSplash(); }, 1600);
-
-            updateProfileUI();
-            renderJournal();
-            restoreSavedDraft();
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initApp);
-        } else {
-            initApp();
-        }
-
-        function dismissSplash() {
-            const splash = document.getElementById('splash-screen');
-            if (splash && !splash.classList.contains('opacity-0')) {
-                splash.classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => { if (splash.parentNode) splash.remove(); }, 650);
-            }
-        }
-
-        // Auto-save student draft (text, instructions, and compressed image) to prevent loss on mobile reload
-        let draftSaveTimer = null;
-        function autoSaveDraft() {
-            try {
-                const textVal = document.getElementById('lesson-text-input').value;
-                const instVal = document.getElementById('custom-instruction-input').value;
-                localStorage.setItem('midad_draft_text', textVal);
-                localStorage.setItem('midad_draft_instruction', instVal);
-
-                const indicator = document.getElementById('autosave-indicator');
-                if (indicator) {
-                    indicator.classList.remove('opacity-0');
-                    clearTimeout(draftSaveTimer);
-                    draftSaveTimer = setTimeout(() => indicator.classList.add('opacity-0'), 1800);
-                }
-            } catch (e) {
-                // Ignore quota exceeded errors gracefully
-            }
-        }
-
-        function restoreSavedDraft() {
-            try {
-                const savedText = localStorage.getItem('midad_draft_text');
-                const savedInst = localStorage.getItem('midad_draft_instruction');
-                const savedImgData = localStorage.getItem('midad_draft_image');
-
-                if (savedText) document.getElementById('lesson-text-input').value = savedText;
-                if (savedInst) document.getElementById('custom-instruction-input').value = savedInst;
-                if (savedImgData && savedImgData.startsWith('data:image/')) {
-                    uploadedImageBase64 = savedImgData.split(',')[1];
-                    uploadedImageMime = 'image/jpeg';
-                    document.getElementById('image-preview').src = savedImgData;
-                    document.getElementById('upload-placeholder').classList.add('hidden');
-                    document.getElementById('image-preview-wrapper').classList.remove('hidden');
-                }
-            } catch (e) {
-                // Ignore storage errors
-            }
-        }
-
-        // 2. Dark Mode Toggle
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            showToast(isDark ? 'تم تفعيل الوضع الليلي المريح 🌙' : 'تم تفعيل الوضع النهاري المشرق ☀️');
-        }
-
-        // 3. Tab Navigation (Create vs Journal)
-        function switchTab(tabName) {
-            const tabCreate = document.getElementById('tab-create');
-            const tabJournal = document.getElementById('tab-journal');
-            const navCreate = document.getElementById('nav-create');
-            const navJournal = document.getElementById('nav-journal');
-            const mNavCreate = document.getElementById('m-nav-create');
-            const mNavJournal = document.getElementById('m-nav-journal');
-
-            if (tabName === 'create') {
-                tabCreate.classList.remove('hidden');
-                tabJournal.classList.add('hidden');
-                
-                navCreate.className = "px-5 py-2 rounded-full text-sm font-bold transition-all bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-sm";
-                navJournal.className = "px-5 py-2 rounded-full text-sm font-bold transition-all text-midad-chocolate/70 dark:text-stone-300 hover:text-midad-chocolate flex items-center gap-2";
-
-                mNavCreate.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-ios";
-                mNavJournal.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold ios-glass text-midad-chocolate dark:text-stone-200 flex items-center justify-center gap-1.5";
-            } else {
-                tabCreate.classList.add('hidden');
-                tabJournal.classList.remove('hidden');
-                renderJournal();
-
-                navJournal.className = "px-5 py-2 rounded-full text-sm font-bold transition-all bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-sm flex items-center gap-2";
-                navCreate.className = "px-5 py-2 rounded-full text-sm font-bold transition-all text-midad-chocolate/70 dark:text-stone-300 hover:text-midad-chocolate";
-
-                mNavJournal.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-ios flex items-center justify-center gap-1.5";
-                mNavCreate.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold ios-glass text-midad-chocolate dark:text-stone-200";
-            }
-        }
-
-        // 4. Student Profile & Auth Modal
-        function openAuthModal() {
-            document.getElementById('auth-name-input').value = studentProfile.name !== 'طالب مِداد' ? studentProfile.name : '';
-            document.getElementById('auth-email-input').value = studentProfile.email || '';
-            const modal = document.getElementById('auth-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeAuthModal() {
-            const modal = document.getElementById('auth-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function handleStudentLogin(e) {
-            e.preventDefault();
-            const nameVal = document.getElementById('auth-name-input').value.trim();
-            const emailVal = document.getElementById('auth-email-input').value.trim();
-            if (nameVal) {
-                studentProfile = { name: nameVal, email: emailVal };
-                localStorage.setItem('midad_student_profile', JSON.stringify(studentProfile));
-                updateProfileUI();
-                closeAuthModal();
-                showToast(`أهلاً بك يا ${nameVal}! تم تخصيص مساحتك بنجاح 🎓`);
-            }
-        }
-
-        function continueAsGuest() {
-            studentProfile = { name: 'طالب زائر', email: '' };
-            localStorage.setItem('midad_student_profile', JSON.stringify(studentProfile));
-            updateProfileUI();
-            closeAuthModal();
-            showToast('مرحباً بك في مساحة التجربة السريعة ✨');
-        }
-
-        function updateProfileUI() {
-            document.getElementById('student-name-label').textContent = studentProfile.name;
-            document.getElementById('hero-student-name').textContent = studentProfile.name;
-            document.getElementById('student-avatar').textContent = studentProfile.name.charAt(0);
-            updateJournalBadges();
-        }
-
-        function updateJournalBadges() {
-            const count = savedJournal.length;
-            document.getElementById('journal-badge').textContent = count;
-            document.getElementById('m-journal-badge').textContent = count;
-        }
-
-        // 5. Image Compression via HTML5 Canvas (Max 800px, JPEG 0.72 quality for fast reliable mobile upload)
-        function compressImageFile(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onerror = () => reject(new Error('فشل قراءة ملف الصورة'));
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onerror = () => reject(new Error('صيغة الصورة غير مدعومة'));
-                    img.onload = function() {
-                        const MAX_WIDTH = 800;
-                        let targetW = img.width;
-                        let targetH = img.height;
-
-                        if (targetW > MAX_WIDTH) {
-                            targetH = Math.round((targetH * MAX_WIDTH) / targetW);
-                            targetW = MAX_WIDTH;
-                        }
-
-                        const canvas = document.createElement('canvas');
-                        canvas.width = targetW;
-                        canvas.height = targetH;
-                        const ctx = canvas.getContext('2d');
-                        ctx.fillStyle = '#FFFFFF';
-                        ctx.fillRect(0, 0, targetW, targetH);
-                        ctx.drawImage(img, 0, 0, targetW, targetH);
-
-                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
-                        resolve(compressedDataUrl);
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        async function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            try {
-                showToast('جاري تجهيز وضغط الصورة بجودة عالية... 📸');
-                const compressedDataUrl = await compressImageFile(file);
-                uploadedImageBase64 = compressedDataUrl.split(',')[1];
-                uploadedImageMime = 'image/jpeg';
-
-                document.getElementById('image-preview').src = compressedDataUrl;
-                document.getElementById('upload-placeholder').classList.add('hidden');
-                document.getElementById('image-preview-wrapper').classList.remove('hidden');
-
-                // Persist compressed image draft safely in localStorage
-                try {
-                    localStorage.setItem('midad_draft_image', compressedDataUrl);
-                } catch (storageErr) {
-                    // Ignore if image exceeds localStorage limit
-                }
-
-                showToast('تم إرفاق صورة الدرس بنجاح ✨');
-            } catch (err) {
-                showToast('تعذر تحميل الصورة، يرجى اختيار صورة أخرى من المعرض ⚠️');
-            }
-        }
-
-        function removeUploadedImage() {
-            uploadedImageBase64 = null;
-            uploadedImageMime = 'image/jpeg';
-            document.getElementById('gallery-image-input').value = '';
-            document.getElementById('camera-image-input').value = '';
-            document.getElementById('upload-placeholder').classList.remove('hidden');
-            document.getElementById('image-preview-wrapper').classList.add('hidden');
-            localStorage.removeItem('midad_draft_image');
-        }
-
-        function setInstruction(text) {
-            document.getElementById('custom-instruction-input').value = text;
-            autoSaveDraft();
-        }
-
-        function clearInputs() {
-            document.getElementById('lesson-text-input').value = '';
-            document.getElementById('custom-instruction-input').value = '';
-            localStorage.removeItem('midad_draft_text');
-            localStorage.removeItem('midad_draft_instruction');
-            removeUploadedImage();
-            showToast('تم تنظيف مساحة الإدخال ✨');
-        }
-
-        function selectPalette(paletteKey, btnElement) {
-            currentPalette = paletteKey;
-            document.querySelectorAll('.palette-btn').forEach(btn => {
-                btn.classList.remove('border-midad-olive', 'border-midad-blushDeep', 'border-midad-sea', 'border-amber-600', 'bg-white', 'dark:bg-midad-darkBg', 'shadow-sm');
-                btn.classList.add('border-transparent', 'bg-white/70', 'dark:bg-midad-darkBg/70');
-            });
-            btnElement.classList.remove('border-transparent', 'bg-white/70', 'dark:bg-midad-darkBg/70');
-            btnElement.classList.add('border-midad-olive', 'bg-white', 'dark:bg-midad-darkBg', 'shadow-sm');
-        }
-
-        // 6. Generate Mind Map via Gemini API with Timeout & Robust JSON Parsing
-        async function generateMindMap() {
-            const lessonText = document.getElementById('lesson-text-input').value.trim();
-            const customInstruction = document.getElementById('custom-instruction-input').value.trim();
-
-            if (!lessonText && !uploadedImageBase64) {
-                showToast('من فضلك ارفع صورة الدرس من المعرض أو اكتب نصاً أولاً 🖼️✍️');
-                return;
-        // 6. Generate Mind Map via Gemini API (Clean Payload + Safe JSON Extraction)
-        async function generateMindMap() {
-            const lessonText = document.getElementById('lesson-text-input').value.trim();
-            const customInstruction = document.getElementById('custom-instruction-input').value.trim();
-
-            if (!lessonText && !uploadedImageBase64) {
-                showToast('من فضلك ارفع صورة الدرس من المعرض أو اكتب نصاً أولاً 🖼️✍️');
-                return;
-            }
-
-            const loadingEl = document.getElementById('loading-state');
-            const resultEl = document.getElementById('mindmap-result-section');
-            const generateBtn = document.getElementById('generate-btn');
-
-            loadingEl.classList.remove('hidden');
-            resultEl.classList.add('hidden');
-            generateBtn.disabled = true;
-            generateBtn.classList.add('opacity-60');
-
-            const systemPrompt = `أنت مساعد تعليمي عربي خبير في تصميم الخرائط الذهنية (Mind Maps) للطلاب بأسلوب بصري مبسط ومركز.
+<!DOCTYPE html>  <html lang="ar" dir="rtl" class="scroll-smooth">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>مِـداد | منصة الخرائط الذهنية والتلخيص الذكي</title>  <!-- Google Fonts: Cairo & Tajawal -->  
+<link rel="preconnect" href="https://fonts.googleapis.com">  
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">  
+  
+<!-- Tailwind CSS -->  
+<script src="https://cdn.tailwindcss.com"></script>  
+<!-- html2canvas for High-Quality Mind Map PNG Export -->  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>  
+<script>  
+    tailwind.config = {  
+        darkMode: 'class',  
+        theme: {  
+            extend: {  
+                fontFamily: {  
+                    sans: ['Cairo', 'Tajawal', 'sans-serif'],  
+                },  
+                colors: {  
+                    midad: {  
+                        cream: '#FAFAFA',  
+                        chocolate: '#4E342E',  
+                        olive: '#556B2F',  
+                        oliveLight: '#738F41',  
+                        sky: '#87CEEB',  
+                        sea: '#1E6091',  
+                        blush: '#F4C2C2',  
+                        blushDeep: '#E5989B',  
+                        darkBg: '#121212',  
+                        darkCard: '#1E1E1E',  
+                        darkElevated: '#262626'  
+                    }  
+                },  
+                borderRadius: {  
+                    'ios': '26px',  
+                    'ios-lg': '32px',  
+                    'ios-xl': '40px',  
+                },  
+                boxShadow: {  
+                    'ios': '0 10px 30px -5px rgba(78, 52, 46, 0.08), 0 4px 12px -2px rgba(78, 52, 46, 0.04)',  
+                    'ios-hover': '0 20px 40px -10px rgba(30, 96, 145, 0.14), 0 8px 16px -4px rgba(85, 107, 47, 0.08)',  
+                    'ios-dark': '0 12px 32px -4px rgba(0, 0, 0, 0.45)',  
+                }  
+            }  
+        }  
+    }  
+</script>  
+
+<style>  
+    body {  
+        font-family: 'Cairo', sans-serif;  
+        background-color: #FAFAFA;  
+        color: #4E342E;  
+        overflow-x: hidden;  
+        transition: background-color 0.4s ease, color 0.4s ease;  
+    }  
+    html.dark body {  
+        background-color: #121212;  
+        color: #F5F5F4;  
+    }  
+
+    /* Glassmorphism iOS Effects */  
+    .ios-glass {  
+        background: rgba(255, 255, 255, 0.82);  
+        backdrop-filter: blur(20px);  
+        -webkit-backdrop-filter: blur(20px);  
+        border: 1px solid rgba(255, 255, 255, 0.7);  
+    }  
+    html.dark .ios-glass {  
+        background: rgba(30, 30, 30, 0.82);  
+        border: 1px solid rgba(255, 255, 255, 0.08);  
+    }  
+
+    /* Custom Keyword Underline & Highlight Markers */  
+    .keyword-blush {  
+        background: linear-gradient(120deg, rgba(244, 194, 194, 0.45) 0%, rgba(244, 194, 194, 0.8) 100%);  
+        border-bottom: 3px solid #E5989B;  
+        padding: 1px 7px;  
+        border-radius: 9px;  
+        font-weight: 800;  
+        color: #4E342E;  
+        display: inline-block;  
+        margin: 1px 2px;  
+    }  
+    html.dark .keyword-blush {  
+        background: rgba(244, 194, 194, 0.22);  
+        border-bottom: 3px solid #F4C2C2;  
+        color: #FFE4E6;  
+    }  
+
+    .keyword-sky {  
+        background: linear-gradient(120deg, rgba(135, 206, 235, 0.35) 0%, rgba(135, 206, 235, 0.65) 100%);  
+        border-bottom: 3px solid #1E6091;  
+        padding: 1px 7px;  
+        border-radius: 9px;  
+        font-weight: 800;  
+        color: #1E6091;  
+        display: inline-block;  
+        margin: 1px 2px;  
+    }  
+    html.dark .keyword-sky {  
+        background: rgba(135, 206, 235, 0.2);  
+        border-bottom: 3px solid #87CEEB;  
+        color: #BAE6FD;  
+    }  
+
+    /* Smooth Floating & Splash Animations */  
+    @keyframes floatSlow {  
+        0%, 100% { transform: translateY(0px) rotate(0deg); }  
+        50% { transform: translateY(-8px) rotate(1.5deg); }  
+    }  
+    .animate-float {  
+        animation: floatSlow 4.5s ease-in-out infinite;  
+    }  
+
+    @keyframes pulseGlow {  
+        0%, 100% { opacity: 0.55; transform: scale(1); }  
+        50% { opacity: 0.85; transform: scale(1.06); }  
+    }  
+    .animate-glow {  
+        animation: pulseGlow 3.5s ease-in-out infinite;  
+    }  
+
+    @keyframes slideUpFade {  
+        from { opacity: 0; transform: translateY(18px) scale(0.98); }  
+        to { opacity: 1; transform: translateY(0) scale(1); }  
+    }  
+    .animate-card {  
+        animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;  
+    }  
+
+    /* Custom Scrollbar */  
+    ::-webkit-scrollbar { width: 7px; height: 7px; }  
+    ::-webkit-scrollbar-track { background: transparent; }  
+    ::-webkit-scrollbar-thumb { background: rgba(85, 107, 47, 0.3); border-radius: 99px; }  
+    ::-webkit-scrollbar-thumb:hover { background: rgba(30, 96, 145, 0.5); }  
+
+    /* Mind Map Subtle Dot Pattern Background */  
+    .mindmap-grid {  
+        background-image: radial-gradient(rgba(78, 52, 46, 0.11) 1.2px, transparent 1.2px);  
+        background-size: 22px 22px;  
+    }  
+    html.dark .mindmap-grid {  
+        background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);  
+    }  
+</style>
+
+</head>  
+<body class="min-h-screen flex flex-col selection:bg-midad-blush selection:text-midad-chocolate">  <!-- ==================== 1. SPLASH SCREEN ==================== -->  
+<div id="splash-screen" onclick="dismissSplash()" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#FAFAFA] dark:bg-[#121212] transition-all duration-700 cursor-pointer">  
+    <!-- Ambient Organic Blobs -->  
+    <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-midad-sky/30 rounded-full blur-3xl animate-glow pointer-events-none"></div>  
+    <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-midad-olive/20 rounded-full blur-3xl animate-glow pointer-events-none"></div>  
+    <div class="absolute top-1/3 right-1/3 w-64 h-64 bg-midad-blush/35 rounded-full blur-3xl animate-glow pointer-events-none"></div>  
+
+    <div class="relative z-10 flex flex-col items-center text-center px-6 animate-card">  
+        <!-- Custom Midad SVG Emblem (Fountain Pen Nib + Olive Leaf + Sea Wave) -->  
+        <div class="w-28 h-28 rounded-[34px] ios-glass shadow-ios flex items-center justify-center mb-6 animate-float border-2 border-white/80 dark:border-white/10">  
+            <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">  
+                <defs>  
+                    <linearGradient id="midadSplashGrad" x1="15" y1="10" x2="85" y2="90" gradientUnits="userSpaceOnUse">  
+                        <stop offset="0%" stop-color="#1E6091"/>  
+                        <stop offset="50%" stop-color="#556B2F"/>  
+                        <stop offset="100%" stop-color="#4E342E"/>  
+                    </linearGradient>  
+                    <linearGradient id="waveGrad" x1="20" y1="65" x2="85" y2="85" gradientUnits="userSpaceOnUse">  
+                        <stop offset="0%" stop-color="#87CEEB"/>  
+                        <stop offset="100%" stop-color="#F4C2C2"/>  
+                    </linearGradient>  
+                </defs>  
+                <path d="M50 12C50 12 26 36 26 56C26 68 36 76 50 76C64 76 74 68 74 56C74 36 50 12 50 12Z" fill="url(#midadSplashGrad)"/>  
+                <path d="M50 12V46" stroke="#FAFAFA" stroke-width="3.5" stroke-linecap="round"/>  
+                <circle cx="50" cy="51" r="5" fill="#F4C2C2"/>  
+                <path d="M24 44C14 42 10 32 16 24C24 26 28 34 24 44Z" fill="#556B2F" opacity="0.85"/>  
+                <path d="M18 82C30 74 42 88 54 81C66 74 75 84 84 79" stroke="url(#waveGrad)" stroke-width="5.5" stroke-linecap="round"/>  
+            </svg>  
+        </div>  
+
+        <h1 class="text-5xl font-black tracking-tight bg-gradient-to-l from-midad-sea via-midad-olive to-midad-chocolate dark:from-midad-sky dark:via-emerald-300 dark:to-midad-blush bg-clip-text text-transparent mb-2">  
+            مِـداد  
+        </h1>  
+        <p class="text-base sm:text-lg font-semibold text-midad-chocolate/75 dark:text-stone-300 max-w-md mb-8">  
+            حيث تتحول دروسك إلى خرائط ذهنية نابضة بالحياة والتركيز ✨🌿  
+        </p>  
+
+        <!-- Loading Bar -->  
+        <div class="w-48 h-2 bg-midad-chocolate/10 dark:bg-white/10 rounded-full overflow-hidden mb-5">  
+            <div id="splash-progress" class="h-full bg-gradient-to-l from-midad-sea via-midad-olive to-midad-blushDeep rounded-full transition-all duration-1000 ease-out" style="width: 15%"></div>  
+        </div>  
+
+        <button onclick="dismissSplash()" class="text-xs font-bold px-5 py-2.5 rounded-full bg-white/80 dark:bg-white/10 hover:bg-midad-blush/30 text-midad-chocolate dark:text-stone-200 transition-all shadow-sm">  
+            دخول سريع للمنصة ←  
+        </button>  
+    </div>  
+</div>  
+
+<!-- ==================== 2. TOP FLOATING iOS HEADER ==================== -->  
+<header class="sticky top-3 z-40 px-3 sm:px-6 max-w-6xl mx-auto w-full">  
+    <div class="ios-glass rounded-ios-lg shadow-ios px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">  
+        <!-- Brand Logo & Name -->  
+        <a href="#" onclick="switchTab('create'); return false;" class="flex items-center gap-2.5 group shrink-0">  
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-[16px] sm:rounded-[18px] bg-gradient-to-br from-midad-sea/15 via-midad-olive/15 to-midad-blush/30 dark:from-midad-sky/20 dark:to-midad-blush/20 flex items-center justify-center border border-white/60 dark:border-white/10 group-hover:scale-105 transition-transform shrink-0">  
+                <svg class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">  
+                    <path d="M50 12C50 12 26 36 26 56C26 68 36 76 50 76C64 76 74 68 74 56C74 36 50 12 50 12Z" fill="#1E6091"/>  
+                    <path d="M50 12V46" stroke="#FAFAFA" stroke-width="4" stroke-linecap="round"/>  
+                    <circle cx="50" cy="51" r="5" fill="#F4C2C2"/>  
+                    <path d="M24 44C14 42 10 32 16 24C24 26 28 34 24 44Z" fill="#556B2F"/>  
+                    <path d="M18 82C30 74 42 88 54 81C66 74 75 84 84 79" stroke="#87CEEB" stroke-width="6" stroke-linecap="round"/>  
+                </svg>  
+            </div>  
+            <div class="shrink-0">  
+                <span class="text-lg sm:text-2xl font-black text-midad-chocolate dark:text-white tracking-tight block leading-none">مِـداد</span>  
+                <span class="text-[10px] sm:text-[11px] font-bold text-midad-olive dark:text-midad-sky whitespace-nowrap block mt-0.5">رفيقك الذكي للتفوق</span>  
+            </div>  
+        </a>  
+
+        <!-- Navigation Pills (Workspace vs Student Journal) -->  
+        <nav class="hidden md:flex items-center bg-midad-chocolate/5 dark:bg-white/5 p-1.5 rounded-full">  
+            <button id="nav-create" onclick="switchTab('create')" class="px-5 py-2 rounded-full text-sm font-bold transition-all bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-sm">  
+                ✨ صانع الخرائط  
+            </button>  
+            <button id="nav-journal" onclick="switchTab('journal')" class="px-5 py-2 rounded-full text-sm font-bold transition-all text-midad-chocolate/70 dark:text-stone-300 hover:text-midad-chocolate flex items-center gap-2">  
+                <span>🗂️ يومياتي وسلتي</span>  
+                <span id="journal-badge" class="px-2 py-0.5 text-xs rounded-full bg-midad-blush/60 text-midad-chocolate font-extrabold">0</span>  
+            </button>  
+        </nav>  
+
+        <!-- Right Actions: Dark Mode + Student Account Pill -->  
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">  
+            <button onclick="toggleDarkMode()" aria-label="تبديل الوضع الليلي" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-midad-chocolate/5 dark:bg-white/10 hover:bg-midad-sky/25 flex items-center justify-center text-midad-chocolate dark:text-amber-300 transition-all shrink-0">  
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">  
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>  
+                </svg>  
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">  
+                    <circle cx="12" cy="12" r="5"/><path stroke-linecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>  
+                </svg>  
+            </button>  
+
+            <button onclick="openAuthModal()" id="student-profile-btn" class="flex items-center gap-2 pl-3 pr-1.5 py-1 sm:pl-4 sm:pr-2 sm:py-1.5 rounded-full bg-gradient-to-l from-midad-olive to-midad-sea text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all min-w-0">  
+                <div id="student-avatar" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/25 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">  
+                    🎓  
+                </div>  
+                <span id="student-name-label" class="text-xs sm:text-sm font-bold truncate max-w-[95px] sm:max-w-[140px]">حساب الطالب</span>  
+            </button>  
+        </div>  
+    </div>  
+
+    <!-- Mobile Sub Navigation Bar -->  
+    <div class="flex md:hidden items-center justify-center gap-2 mt-2.5">  
+        <button id="m-nav-create" onclick="switchTab('create')" class="flex-1 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-ios">  
+            ✨ صانع الخرائط  
+        </button>  
+        <button id="m-nav-journal" onclick="switchTab('journal')" class="flex-1 py-2.5 rounded-full text-xs font-extrabold ios-glass text-midad-chocolate dark:text-stone-200 flex items-center justify-center gap-1.5">  
+            <span>🗂️ يومياتي وسلتي</span>  
+            <span id="m-journal-badge" class="px-2 py-0.5 text-[11px] rounded-full bg-midad-blush text-midad-chocolate font-black">0</span>  
+        </button>  
+    </div>  
+</header>  
+
+<!-- ==================== 3. MAIN WORKSPACE CONTAINER ==================== -->  
+<main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-16">  
+
+    <!-- Sleek Top iOS Dynamic Island Toast Notification -->  
+    <div id="toast-box" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2.5 px-5 py-3 rounded-2xl bg-midad-chocolate/95 dark:bg-midad-darkElevated/95 text-white border border-white/15 backdrop-blur-xl shadow-2xl text-xs sm:text-sm font-bold transition-all w-max max-w-[92vw] leading-relaxed">  
+        <span id="toast-icon" class="shrink-0 text-base">✨</span>  
+        <span id="toast-text">تم الحفظ بنجاح!</span>  
+    </div>  
+
+    <!-- ==================== TAB 1: MIND MAP CREATOR ==================== -->  
+    <section id="tab-create" class="space-y-8 animate-card">  
+          
+        <!-- Hero Welcome Banner (Clean, authentic, without sample lesson button) -->  
+        <div class="relative overflow-hidden rounded-ios-xl p-6 sm:p-8 bg-gradient-to-bl from-midad-sky/25 via-white to-midad-blush/30 dark:from-midad-sea/25 dark:via-midad-darkCard dark:to-midad-olive/20 border border-white/80 dark:border-white/10 shadow-ios">  
+            <div class="relative z-10 space-y-2.5 max-w-3xl">  
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-midad-olive/15 dark:bg-midad-olive/30 text-midad-olive dark:text-emerald-300 text-xs font-extrabold">  
+                    <span>🌿</span>  
+                    <span>مساحة الدراسة الذكية • حفظ تلقائي لمسودتك</span>  
+                </div>  
+                <h2 class="text-2xl sm:text-3xl font-black text-midad-chocolate dark:text-white leading-snug">  
+                    أهلاً بك <span id="hero-student-name" class="text-midad-sea dark:text-midad-sky">يا بطل</span>! ارفع صورة درسك أو اكتبه ودع «مِداد» يرسم لك خريطة التفوق 🎨  
+                </h2>  
+                <p class="text-sm sm:text-base text-midad-chocolate/75 dark:text-stone-300 font-medium leading-relaxed">  
+                    اختر صورة من معرض هاتفك أو التقطها بالكاميرا، أو اكتب نص الدرس مباشرة، وسأحوله إلى خريطة ذهنية ملونة ومسطّرة تحت أهم المصطلحات.  
+                </p>  
+            </div>  
+        </div>  
+
+        <!-- Input Studio Card -->  
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">  
+              
+            <!-- Left/Main Column: Lesson Input (7 cols) -->  
+            <div class="lg:col-span-7 ios-glass rounded-ios-xl p-6 sm:p-7 shadow-ios space-y-5">  
+                <div class="flex items-center justify-between">  
+                    <h3 class="text-lg font-black text-midad-chocolate dark:text-white flex items-center gap-2">  
+                        <span class="w-8 h-8 rounded-full bg-midad-sky/30 text-midad-sea dark:text-midad-sky flex items-center justify-center text-sm">1</span>  
+                        <span>أدخل محتوى درسك</span>  
+                    </h3>  
+                    <button type="button" onclick="clearInputs()" class="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline">  
+                        مسح الكل 🗑️  
+                    </button>  
+                </div>  
+
+                <!-- Dual Image Input Box: Gallery vs Camera (Safe & Reliable on Mobile) -->  
+                <div class="rounded-ios-lg p-5 bg-white/70 dark:bg-midad-darkBg/60 border-2 border-dashed border-midad-sea/35 dark:border-midad-sky/30 space-y-4">  
+                    <!-- Hidden File Inputs -->  
+                    <input type="file" id="gallery-image-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)">  
+                    <input type="file" id="camera-image-input" accept="image/*" capture="environment" class="hidden" onchange="handleImageUpload(event)">  
+
+                    <div id="upload-placeholder" class="text-center space-y-3 py-1">  
+                        <div class="w-14 h-14 mx-auto rounded-[22px] bg-gradient-to-tr from-midad-sky/30 to-midad-blush/40 flex items-center justify-center text-midad-sea dark:text-midad-sky">  
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">  
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>  
+                            </svg>  
+                        </div>  
+                        <p class="text-sm font-extrabold text-midad-chocolate dark:text-white">  
+                            أرفق صورة صفحة الكراس أو الكتاب  
+                        </p>  
+                        <p class="text-xs text-midad-chocolate/65 dark:text-stone-400">  
+                            اختر صورة جاهزة من المعرض مباشرة دون مغادرة الصفحة، أو التقط صورة جديدة  
+                        </p>  
+
+                        <!-- Two Clear iOS Buttons -->  
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">  
+                            <button type="button" onclick="document.getElementById('gallery-image-input').click()" class="w-full sm:w-auto flex-1 py-3 px-5 rounded-full bg-gradient-to-l from-midad-sea to-midad-olive text-white text-xs sm:text-sm font-extrabold shadow-md hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-2">  
+                                <span>🖼️</span>  
+                                <span>رفع صورة من المعرض</span>  
+                            </button>  
+                            <button type="button" onclick="document.getElementById('camera-image-input').click()" class="w-full sm:w-auto flex-1 py-3 px-5 rounded-full bg-white dark:bg-midad-darkElevated border border-midad-chocolate/15 dark:border-white/15 text-midad-chocolate dark:text-white text-xs sm:text-sm font-extrabold shadow-sm hover:bg-midad-blush/25 active:scale-95 transition-all flex items-center justify-center gap-2">  
+                                <span>📸</span>  
+                                <span>التقاط بالكاميرا</span>  
+                            </button>  
+                        </div>  
+                    </div>  
+
+                    <!-- Image Preview Container -->  
+                    <div id="image-preview-wrapper" class="hidden relative text-center">  
+                        <img id="image-preview" src="" alt="معاينة الدرس" class="max-h-64 mx-auto rounded-ios object-contain shadow-md border border-white/80 dark:border-white/10">  
+                        <div class="flex items-center justify-center gap-2 mt-3">  
+                            <span id="image-size-badge" class="px-3 py-1 rounded-full bg-midad-olive/15 text-midad-olive dark:text-emerald-300 text-[11px] font-bold">  
+                                ✓ صورة جاهزة للتحليل  
+                            </span>  
+                            <button type="button" onclick="removeUploadedImage()" class="px-3.5 py-1 rounded-full bg-rose-500 text-white text-xs font-bold shadow-sm hover:bg-rose-600 transition-colors">  
+                                حذف الصورة ✕  
+                            </button>  
+                        </div>  
+                    </div>  
+                </div>  
+
+                <!-- Direct Text Input with Auto-Save -->  
+                <div>  
+                    <div class="flex items-center justify-between mb-2">  
+                        <label class="text-xs font-extrabold text-midad-chocolate/80 dark:text-stone-300">  
+                            أو اكتب / ألصق نص الدرس هنا مباشرة ✍️:  
+                        </label>  
+                        <span id="autosave-indicator" class="text-[11px] font-bold text-midad-olive dark:text-emerald-400 opacity-0 transition-opacity">  
+                            ✓ محفوظ تلقائياً  
+                        </span>  
+                    </div>  
+                    <textarea id="lesson-text-input" rows="5" oninput="autoSaveDraft()" placeholder="اكتب فقرات درسك هنا... يتم حفظ مسودتك تلقائياً في المتصفح حتى لا يضيع حرف واحد 🌿" class="w-full rounded-ios bg-white/95 dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 p-4 text-sm font-medium text-midad-chocolate dark:text-white placeholder:text-midad-chocolate/40 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-midad-sea transition-all resize-none"></textarea>  
+                </div>  
+            </div>  
+
+            <!-- Right Column: Instructions & Palette Selection (5 cols) -->  
+            <div class="lg:col-span-5 ios-glass rounded-ios-xl p-6 sm:p-7 shadow-ios flex flex-col justify-between space-y-5">  
+                <div class="space-y-5">  
+                    <h3 class="text-lg font-black text-midad-chocolate dark:text-white flex items-center gap-2">  
+                        <span class="w-8 h-8 rounded-full bg-midad-blush/50 text-midad-chocolate flex items-center justify-center text-sm">2</span>  
+                        <span>توجيهاتك الذكية & الألوان</span>  
+                    </h3>  
+
+                    <!-- Lightweight Student Instruction -->  
+                    <div>  
+                        <label class="block text-xs font-extrabold text-midad-chocolate/80 dark:text-stone-300 mb-2">  
+                            ملاحظة خفيفة لمِداد (اختياري) 💬:  
+                        </label>  
+                        <input type="text" id="custom-instruction-input" oninput="autoSaveDraft()" placeholder="مثال: لخص الجزء الأول فقط واحذف الأمثلة الطويلة..." class="w-full rounded-ios bg-white/95 dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 px-4 py-3 text-sm font-medium text-midad-chocolate dark:text-white placeholder:text-midad-chocolate/40 focus:outline-none focus:ring-2 focus:ring-midad-olive transition-all">  
+                          
+                        <!-- Quick Suggestion Chips -->  
+                        <div class="flex flex-wrap gap-1.5 mt-2.5">  
+                            <button type="button" onclick="setInstruction('لخص بأسلوب مختصر جداً وركز على التعاريف')" class="text-[11px] font-bold px-3 py-1 rounded-full bg-midad-olive/10 dark:bg-midad-olive/25 text-midad-olive dark:text-emerald-300 hover:bg-midad-olive/20 transition-colors">  
+                                + ركز على التعاريف  
+                            </button>  
+                            <button type="button" onclick="setInstruction('احذف الأمثلة الطويلة واستخرج العناصر الأساسية فقط')" class="text-[11px] font-bold px-3 py-1 rounded-full bg-midad-sea/10 dark:bg-midad-sky/20 text-midad-sea dark:text-midad-sky hover:bg-midad-sea/20 transition-colors">  
+                                + احذف الأمثلة الطويلة  
+                            </button>  
+                        </div>  
+                    </div>  
+
+                    <!-- Aesthetic Nature & Sea Palette Selector -->  
+                    <div>  
+                        <label class="block text-xs font-extrabold text-midad-chocolate/80 dark:text-stone-300 mb-2.5">  
+                            اختر طابع ألوان الخريطة الذهنية 🎨:  
+                        </label>  
+                        <div class="grid grid-cols-2 gap-2.5" id="palette-selector">  
+                            <button type="button" onclick="selectPalette('nature', this)" class="palette-btn active flex items-center gap-2.5 p-3 rounded-ios bg-white dark:bg-midad-darkBg border-2 border-midad-olive shadow-sm text-right transition-all">  
+                                <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#556B2F] to-[#87CEEB] shrink-0"></span>  
+                                <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">طبيعة وبحر 🌿</span>  
+                            </button>  
+                            <button type="button" onclick="selectPalette('blush', this)" class="palette-btn flex items-center gap-2.5 p-3 rounded-ios bg-white/70 dark:bg-midad-darkBg/70 border-2 border-transparent hover:border-midad-blushDeep text-right transition-all">  
+                                <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#4E342E] to-[#F4C2C2] shrink-0"></span>  
+                                <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">شوكولا وبلوش 🌸</span>  
+                            </button>  
+                            <button type="button" onclick="selectPalette('sea', this)" class="palette-btn flex items-center gap-2.5 p-3 rounded-ios bg-white/70 dark:bg-midad-darkBg/70 border-2 border-transparent hover:border-midad-sea text-right transition-all">  
+                                <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#1E6091] to-[#87CEEB] shrink-0"></span>  
+                                <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">أزرق سماوي 🌊</span>  
+                            </button>  
+                            <button type="button" onclick="selectPalette('royal', this)" class="palette-btn flex items-center gap-2.5 p-3 rounded-ios bg-white/70 dark:bg-midad-darkBg/70 border-2 border-transparent hover:border-amber-600 text-right transition-all">  
+                                <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#121212] via-[#556B2F] to-[#F4C2C2] shrink-0"></span>  
+                                <span class="text-xs font-extrabold text-midad-chocolate dark:text-white">تباين فخم ✨</span>  
+                            </button>  
+                        </div>  
+                    </div>  
+                </div>  
+
+                <!-- Primary Action Generate Button -->  
+                <button id="generate-btn" onclick="generateMindMap()" class="w-full py-4 px-6 rounded-ios-lg bg-gradient-to-l from-midad-sea via-midad-olive to-midad-chocolate hover:opacity-95 text-white font-black text-base shadow-lg hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-3">  
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">  
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>  
+                    </svg>  
+                    <span>حوّل الدرس إلى خريطة ذهنية</span>  
+                </button>  
+            </div>  
+        </div>  
+
+        <!-- ==================== LOADING STATE ==================== -->  
+        <div id="loading-state" class="hidden ios-glass rounded-ios-xl p-10 text-center shadow-ios space-y-4 animate-card">  
+            <div class="w-20 h-20 mx-auto rounded-[28px] bg-gradient-to-tr from-midad-sky/30 via-midad-olive/20 to-midad-blush/40 flex items-center justify-center">  
+                <svg class="w-10 h-10 text-midad-sea dark:text-midad-sky animate-spin" fill="none" viewBox="0 0 24 24">  
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>  
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>  
+                </svg>  
+            </div>  
+            <h4 class="text-xl font-black text-midad-chocolate dark:text-white">مِداد يقرأ درسك ويرسم خريطتك الذهنية... 🖋️✨</h4>  
+            <p class="text-sm text-midad-chocolate/70 dark:text-stone-300 max-w-md mx-auto">  
+                نقوم الآن باستخراج الكلمات المفتاحية، تسطير المصطلحات الهامة، وتحديد نقاط التركيز للاختبار.  
+            </p>  
+        </div>  
+
+        <!-- ==================== 4. MIND MAP OUTPUT CANVAS ==================== -->  
+        <div id="mindmap-result-section" class="hidden space-y-6 animate-card">  
+              
+            <!-- Motivational Banner -->  
+            <div class="rounded-ios-lg p-5 sm:p-6 bg-gradient-to-l from-midad-olive to-midad-sea text-white shadow-ios flex flex-col sm:flex-row items-center justify-between gap-4">  
+                <div class="flex items-center gap-4 text-center sm:text-right">  
+                    <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shrink-0">  
+                        🎓  
+                    </div>  
+                    <div>  
+                        <h4 class="font-black text-base sm:text-lg">  
+                            ها هي خريطتك الذهنية جاهزة! قم بكتابتها في كراسك، احفظها، وادرسها جيداً.. النجاح ينتظرك! ✨  
+                        </h4>  
+                        <p id="map-encouragement-sub" class="text-xs sm:text-sm text-white/90 mt-0.5">  
+                            الكلمات المسطّرة بالألوان هي مفاتيح الإجابة النموذجية في الامتحان.  
+                        </p>  
+                    </div>  
+                </div>  
+
+                <!-- Action Buttons: Save to Journal & Download PNG -->  
+                <div class="flex items-center gap-2.5 shrink-0">  
+                    <button onclick="saveCurrentMapToJournal()" class="px-4 py-2.5 rounded-full bg-white text-midad-chocolate hover:bg-midad-blush font-extrabold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all active:scale-95">  
+                        <span>🗂️</span>  
+                        <span>حفظ في يومياتي</span>  
+                    </button>  
+                    <button onclick="downloadMindMapAsImage()" class="px-4 py-2.5 rounded-full bg-midad-chocolate text-white hover:bg-midad-chocolate/90 font-extrabold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all active:scale-95">  
+                        <span>📥</span>  
+                        <span>تحميل كصورة PNG</span>  
+                    </button>  
+                </div>  
+            </div>  
+
+            <!-- Visual Mind Map Board -->  
+            <div id="mindmap-board" class="relative rounded-ios-xl mindmap-grid bg-white dark:bg-midad-darkCard border-2 border-midad-chocolate/10 dark:border-white/10 p-6 sm:p-10 shadow-ios overflow-hidden">  
+                  
+                <!-- Watermark Emblem Top -->  
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-midad-chocolate/10 dark:border-white/10">  
+                    <div class="flex items-center gap-2">  
+                        <span class="w-3 h-3 rounded-full bg-midad-blushDeep"></span>  
+                        <span class="w-3 h-3 rounded-full bg-midad-sky"></span>  
+                        <span class="w-3 h-3 rounded-full bg-midad-olive"></span>  
+                        <span id="map-date-stamp" class="text-xs font-bold text-midad-chocolate/60 dark:text-stone-400 mr-2"></span>  
+                    </div>  
+                    <div class="flex items-center gap-1.5 text-xs font-black text-midad-sea dark:text-midad-sky">  
+                        <span>مِـداد • خريطة ذهنية</span>  
+                        <span>🖋️</span>  
+                    </div>  
+                </div>  
+
+                <!-- Central Core Node -->  
+                <div class="flex flex-col items-center text-center mb-8 relative z-10">  
+                    <div id="central-node-card" class="max-w-2xl w-full rounded-ios-xl p-6 sm:p-7 bg-gradient-to-br from-midad-sea to-midad-olive text-white shadow-xl border-4 border-white dark:border-midad-darkElevated">  
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-[11px] font-extrabold mb-2">  
+                            الموضوع الرئيسي للدرس 🎯  
+                        </span>  
+                        <h2 id="map-main-title" class="text-2xl sm:text-3xl font-black mb-2 leading-snug">  
+                            عنوان الدرس  
+                        </h2>  
+                        <p id="map-central-summary" class="text-xs sm:text-sm text-white/95 font-medium leading-relaxed">  
+                            ملخص الفكرة المحورية للدرس...  
+                        </p>  
+                    </div>  
+
+                    <!-- Decorative SVG Connector Trunk -->  
+                    <svg class="w-full max-w-3xl h-12 text-midad-sea/40 dark:text-midad-sky/40" viewBox="0 0 600 50" fill="none" preserveAspectRatio="none">  
+                        <path d="M300 0 V22" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>  
+                        <path d="M90 48 C90 22, 300 22, 300 22 C300 22, 510 22, 510 48" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>  
+                        <path d="M300 22 V48" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>  
+                    </svg>  
+                </div>  
+
+                <!-- Branches Grid -->  
+                <div id="map-branches-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 relative z-10">  
+                    <!-- Dynamically Populated Mind Map Branch Cards -->  
+                </div>  
+            </div>  
+        </div>  
+    </section>  
+
+    <!-- ==================== TAB 2: STUDENT JOURNAL & BASKET ==================== -->  
+    <section id="tab-journal" class="hidden space-y-6 animate-card">  
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 ios-glass rounded-ios-xl p-6 shadow-ios">  
+            <div>  
+                <h2 class="text-2xl font-black text-midad-chocolate dark:text-white flex items-center gap-2.5">  
+                    <span>🗂️ يومياتي وسلة ملخصاتي</span>  
+                </h2>  
+                <p class="text-sm text-midad-chocolate/70 dark:text-stone-300 mt-1">  
+                    كل خرائطك الذهنية محفوظة هنا مرتبة بالتاريخ لتعود إليها وتراجعها في أي وقت.  
+                </p>  
+            </div>  
+            <button onclick="switchTab('create')" class="px-5 py-3 rounded-full bg-gradient-to-l from-midad-sea to-midad-olive text-white font-extrabold text-sm shadow-md hover:opacity-95 transition-all self-start sm:self-auto">  
+                + إنشاء خريطة جديدة  
+            </button>  
+        </div>  
+
+        <!-- Saved Mind Maps Grid -->  
+        <div id="journal-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">  
+            <!-- Populated dynamically -->  
+        </div>  
+
+        <!-- Empty Journal State -->  
+        <div id="journal-empty-state" class="hidden ios-glass rounded-ios-xl p-12 text-center shadow-ios space-y-4">  
+            <div class="w-20 h-20 mx-auto rounded-[28px] bg-midad-sky/20 text-midad-sea dark:text-midad-sky flex items-center justify-center text-4xl">  
+                📓  
+            </div>  
+            <h3 class="text-xl font-black text-midad-chocolate dark:text-white">سلة يومياتك فارغة حالياً</h3>  
+            <p class="text-sm text-midad-chocolate/70 dark:text-stone-400 max-w-md mx-auto">  
+                ابدأ بتلخيص أول درس لك الآن، واضغط على «حفظ في يومياتي» لبناء مكتبتك الدراسية الخاصة!  
+            </p>  
+            <button onclick="switchTab('create')" class="px-6 py-3 rounded-full bg-midad-olive text-white font-extrabold text-sm shadow-md">  
+                ابدأ أول ملخص الآن ✨  
+            </button>  
+        </div>  
+    </section>  
+
+</main>  
+
+<!-- ==================== 5. STUDENT AUTH MODAL (iOS Style) ==================== -->  
+<div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/45 backdrop-blur-sm">  
+    <div class="ios-glass bg-white dark:bg-midad-darkCard rounded-ios-xl max-w-md w-full p-7 shadow-2xl border border-white/80 dark:border-white/10 space-y-6 animate-card relative">  
+        <button onclick="closeAuthModal()" class="absolute top-5 left-5 w-9 h-9 rounded-full bg-midad-chocolate/10 dark:bg-white/10 flex items-center justify-center text-midad-chocolate dark:text-white font-bold hover:bg-rose-500 hover:text-white transition-colors">  
+            ✕  
+        </button>  
+
+        <div class="text-center space-y-2">  
+            <div class="w-16 h-16 mx-auto rounded-[24px] bg-gradient-to-tr from-midad-sea/20 via-midad-olive/20 to-midad-blush/40 flex items-center justify-center text-3xl">  
+                🎓  
+            </div>  
+            <h3 class="text-2xl font-black text-midad-chocolate dark:text-white">فضاء الطالب في مِـداد</h3>  
+            <p class="text-xs sm:text-sm text-midad-chocolate/70 dark:text-stone-300">  
+                سجّل اسمك وبريدك لحفظ يومياتك وخرائطك الذهنية باسمك، أو ادخل كزائر بنقرة واحدة.  
+            </p>  
+        </div>  
+
+        <form onsubmit="handleStudentLogin(event)" class="space-y-4">  
+            <div>  
+                <label class="block text-xs font-extrabold text-midad-chocolate dark:text-stone-200 mb-1.5">الاسم الكامل أو اللقب الدراسي ✨</label>  
+                <input type="text" id="auth-name-input" required placeholder="مثال: سارة بن علي / أمين..." class="w-full rounded-ios bg-midad-cream dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 px-4 py-3 text-sm font-bold text-midad-chocolate dark:text-white focus:outline-none focus:ring-2 focus:ring-midad-sea">  
+            </div>  
+            <div>  
+                <label class="block text-xs font-extrabold text-midad-chocolate dark:text-stone-200 mb-1.5">البريد الإلكتروني أو المستوى الدراسي (اختياري) 📧</label>  
+                <input type="text" id="auth-email-input" placeholder="مثال: student@email.com أو بكالوريا..." class="w-full rounded-ios bg-midad-cream dark:bg-midad-darkBg border border-midad-chocolate/15 dark:border-white/10 px-4 py-3 text-sm font-medium text-midad-chocolate dark:text-white focus:outline-none focus:ring-2 focus:ring-midad-olive">  
+            </div>  
+            <button type="submit" class="w-full py-3.5 rounded-ios bg-gradient-to-l from-midad-sea to-midad-olive text-white font-black text-sm shadow-lg hover:opacity-95 transition-all">  
+                حفظ الدخول وتخصيص حسابي 🚀  
+            </button>  
+            <button type="button" onclick="continueAsGuest()" class="w-full py-2.5 rounded-ios bg-midad-chocolate/5 dark:bg-white/5 text-midad-chocolate/80 dark:text-stone-300 font-bold text-xs hover:bg-midad-chocolate/10 transition-all">  
+                المتابعة كزائر سريع ✨  
+            </button>  
+        </form>  
+    </div>  
+</div>  
+
+<!-- ==================== 6. OFFICIAL CREATOR FOOTER ==================== -->  
+<footer class="mt-auto py-8 px-4 border-t border-midad-chocolate/10 dark:border-white/10 bg-white/50 dark:bg-midad-darkCard/50 backdrop-blur-md">  
+    <div class="max-w-6xl mx-auto flex flex-col items-center justify-center text-center space-y-3">  
+        <div class="flex items-center gap-2">  
+            <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">  
+                <path d="M50 12C50 12 26 36 26 56C26 68 36 76 50 76C64 76 74 68 74 56C74 36 50 12 50 12Z" fill="#556B2F"/>  
+                <circle cx="50" cy="51" r="5" fill="#F4C2C2"/>  
+                <path d="M18 82C30 74 42 88 54 81C66 74 75 84 84 79" stroke="#1E6091" stroke-width="6" stroke-linecap="round"/>  
+            </svg>  
+            <span class="font-black text-base text-midad-chocolate dark:text-white">منصة مِـداد التعليمية</span>  
+        </div>  
+
+        <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-l from-midad-blush/30 via-white to-midad-sky/25 dark:from-midad-olive/20 dark:via-midad-darkElevated dark:to-midad-sea/20 border border-midad-chocolate/10 dark:border-white/10 shadow-sm">  
+            <span class="text-xs sm:text-sm font-extrabold text-midad-chocolate dark:text-stone-200">  
+                صُمّم وابتُكر من طرف: <span class="text-midad-sea dark:text-midad-sky font-black">نذير صلاح الدين أبحري</span> ✨  
+            </span>  
+        </div>  
+    </div>  
+</footer>  
+
+<!-- ==================== JAVASCRIPT LOGIC & GEMINI API INTEGRATION ==================== -->  
+<script>  
+    // API Configuration (Runtime key injected automatically in Canvas)  
+    const apiKey = "";  
+    const GEMINI_MODEL = "gemini-3-flash-preview";  
+
+    // App State  
+    let currentPalette = 'nature';  
+    let uploadedImageBase64 = null;  
+    let uploadedImageMime = 'image/jpeg';  
+    let currentGeneratedMap = null;  
+    let studentProfile = JSON.parse(localStorage.getItem('midad_student_profile')) || {  
+        name: 'طالب مِداد',  
+        email: ''  
+    };  
+    let savedJournal = JSON.parse(localStorage.getItem('midad_student_journal')) || [];  
+
+    // 1. Splash Screen Lifecycle & Auto-Draft Restoration  
+    function initApp() {  
+        const progress = document.getElementById('splash-progress');  
+        setTimeout(() => { if (progress) progress.style.width = '100%'; }, 150);  
+        setTimeout(() => { dismissSplash(); }, 1600);  
+
+        updateProfileUI();  
+        renderJournal();  
+        restoreSavedDraft();  
+    }  
+
+    if (document.readyState === 'loading') {  
+        document.addEventListener('DOMContentLoaded', initApp);  
+    } else {  
+        initApp();  
+    }  
+
+    function dismissSplash() {  
+        const splash = document.getElementById('splash-screen');  
+        if (splash && !splash.classList.contains('opacity-0')) {  
+            splash.classList.add('opacity-0', 'pointer-events-none');  
+            setTimeout(() => { if (splash.parentNode) splash.remove(); }, 650);  
+        }  
+    }  
+
+    // Auto-save student draft (text, instructions, and compressed image) to prevent loss on mobile reload  
+    let draftSaveTimer = null;  
+    function autoSaveDraft() {  
+        try {  
+            const textVal = document.getElementById('lesson-text-input').value;  
+            const instVal = document.getElementById('custom-instruction-input').value;  
+            localStorage.setItem('midad_draft_text', textVal);  
+            localStorage.setItem('midad_draft_instruction', instVal);  
+
+            const indicator = document.getElementById('autosave-indicator');  
+            if (indicator) {  
+                indicator.classList.remove('opacity-0');  
+                clearTimeout(draftSaveTimer);  
+                draftSaveTimer = setTimeout(() => indicator.classList.add('opacity-0'), 1800);  
+            }  
+        } catch (e) {  
+            // Ignore quota exceeded errors gracefully  
+        }  
+    }  
+
+    function restoreSavedDraft() {  
+        try {  
+            const savedText = localStorage.getItem('midad_draft_text');  
+            const savedInst = localStorage.getItem('midad_draft_instruction');  
+            const savedImgData = localStorage.getItem('midad_draft_image');  
+
+            if (savedText) document.getElementById('lesson-text-input').value = savedText;  
+            if (savedInst) document.getElementById('custom-instruction-input').value = savedInst;  
+            if (savedImgData && savedImgData.startsWith('data:image/')) {  
+                uploadedImageBase64 = savedImgData.split(',')[1];  
+                uploadedImageMime = 'image/jpeg';  
+                document.getElementById('image-preview').src = savedImgData;  
+                document.getElementById('upload-placeholder').classList.add('hidden');  
+                document.getElementById('image-preview-wrapper').classList.remove('hidden');  
+            }  
+        } catch (e) {  
+            // Ignore storage errors  
+        }  
+    }  
+
+    // 2. Dark Mode Toggle  
+    function toggleDarkMode() {  
+        document.documentElement.classList.toggle('dark');  
+        const isDark = document.documentElement.classList.contains('dark');  
+        showToast(isDark ? 'تم تفعيل الوضع الليلي المريح 🌙' : 'تم تفعيل الوضع النهاري المشرق ☀️');  
+    }  
+
+    // 3. Tab Navigation (Create vs Journal)  
+    function switchTab(tabName) {  
+        const tabCreate = document.getElementById('tab-create');  
+        const tabJournal = document.getElementById('tab-journal');  
+        const navCreate = document.getElementById('nav-create');  
+        const navJournal = document.getElementById('nav-journal');  
+        const mNavCreate = document.getElementById('m-nav-create');  
+        const mNavJournal = document.getElementById('m-nav-journal');  
+
+        if (tabName === 'create') {  
+            tabCreate.classList.remove('hidden');  
+            tabJournal.classList.add('hidden');  
+              
+            navCreate.className = "px-5 py-2 rounded-full text-sm font-bold transition-all bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-sm";  
+            navJournal.className = "px-5 py-2 rounded-full text-sm font-bold transition-all text-midad-chocolate/70 dark:text-stone-300 hover:text-midad-chocolate flex items-center gap-2";  
+
+            mNavCreate.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-ios";  
+            mNavJournal.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold ios-glass text-midad-chocolate dark:text-stone-200 flex items-center justify-center gap-1.5";  
+        } else {  
+            tabCreate.classList.add('hidden');  
+            tabJournal.classList.remove('hidden');  
+            renderJournal();  
+
+            navJournal.className = "px-5 py-2 rounded-full text-sm font-bold transition-all bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-sm flex items-center gap-2";  
+            navCreate.className = "px-5 py-2 rounded-full text-sm font-bold transition-all text-midad-chocolate/70 dark:text-stone-300 hover:text-midad-chocolate";  
+
+            mNavJournal.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-midad-darkElevated text-midad-sea dark:text-midad-sky shadow-ios flex items-center justify-center gap-1.5";  
+            mNavCreate.className = "flex-1 py-2.5 rounded-full text-xs font-extrabold ios-glass text-midad-chocolate dark:text-stone-200";  
+        }  
+    }  
+
+    // 4. Student Profile & Auth Modal  
+    function openAuthModal() {  
+        document.getElementById('auth-name-input').value = studentProfile.name !== 'طالب مِداد' ? studentProfile.name : '';  
+        document.getElementById('auth-email-input').value = studentProfile.email || '';  
+        const modal = document.getElementById('auth-modal');  
+        modal.classList.remove('hidden');  
+        modal.classList.add('flex');  
+    }  
+
+    function closeAuthModal() {  
+        const modal = document.getElementById('auth-modal');  
+        modal.classList.add('hidden');  
+        modal.classList.remove('flex');  
+    }  
+
+    function handleStudentLogin(e) {  
+        e.preventDefault();  
+        const nameVal = document.getElementById('auth-name-input').value.trim();  
+        const emailVal = document.getElementById('auth-email-input').value.trim();  
+        if (nameVal) {  
+            studentProfile = { name: nameVal, email: emailVal };  
+            localStorage.setItem('midad_student_profile', JSON.stringify(studentProfile));  
+            updateProfileUI();  
+            closeAuthModal();  
+            showToast(`أهلاً بك يا ${nameVal}! تم تخصيص مساحتك بنجاح 🎓`);  
+        }  
+    }  
+
+    function continueAsGuest() {  
+        studentProfile = { name: 'طالب زائر', email: '' };  
+        localStorage.setItem('midad_student_profile', JSON.stringify(studentProfile));  
+        updateProfileUI();  
+        closeAuthModal();  
+        showToast('مرحباً بك في مساحة التجربة السريعة ✨');  
+    }  
+
+    function updateProfileUI() {  
+        document.getElementById('student-name-label').textContent = studentProfile.name;  
+        document.getElementById('hero-student-name').textContent = studentProfile.name;  
+        document.getElementById('student-avatar').textContent = studentProfile.name.charAt(0);  
+        updateJournalBadges();  
+    }  
+
+    function updateJournalBadges() {  
+        const count = savedJournal.length;  
+        document.getElementById('journal-badge').textContent = count;  
+        document.getElementById('m-journal-badge').textContent = count;  
+    }  
+
+    // 5. Image Compression via HTML5 Canvas (Max 800px, JPEG 0.72 quality for fast reliable mobile upload)  
+    function compressImageFile(file) {  
+        return new Promise((resolve, reject) => {  
+            const reader = new FileReader();  
+            reader.onerror = () => reject(new Error('فشل قراءة ملف الصورة'));  
+            reader.onload = function(e) {  
+                const img = new Image();  
+                img.onerror = () => reject(new Error('صيغة الصورة غير مدعومة'));  
+                img.onload = function() {  
+                    const MAX_WIDTH = 800;  
+                    let targetW = img.width;  
+                    let targetH = img.height;  
+
+                    if (targetW > MAX_WIDTH) {  
+                        targetH = Math.round((targetH * MAX_WIDTH) / targetW);  
+                        targetW = MAX_WIDTH;  
+                    }  
+
+                    const canvas = document.createElement('canvas');  
+                    canvas.width = targetW;  
+                    canvas.height = targetH;  
+                    const ctx = canvas.getContext('2d');  
+                    ctx.fillStyle = '#FFFFFF';  
+                    ctx.fillRect(0, 0, targetW, targetH);  
+                    ctx.drawImage(img, 0, 0, targetW, targetH);  
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);  
+                    resolve(compressedDataUrl);  
+                };  
+                img.src = e.target.result;  
+            };  
+            reader.readAsDataURL(file);  
+        });  
+    }  
+
+    async function handleImageUpload(event) {  
+        const file = event.target.files[0];  
+        if (!file) return;  
+
+        try {  
+            showToast('جاري تجهيز وضغط الصورة بجودة عالية... 📸');  
+            const compressedDataUrl = await compressImageFile(file);  
+            uploadedImageBase64 = compressedDataUrl.split(',')[1];  
+            uploadedImageMime = 'image/jpeg';  
+
+            document.getElementById('image-preview').src = compressedDataUrl;  
+            document.getElementById('upload-placeholder').classList.add('hidden');  
+            document.getElementById('image-preview-wrapper').classList.remove('hidden');  
+
+            // Persist compressed image draft safely in localStorage  
+            try {  
+                localStorage.setItem('midad_draft_image', compressedDataUrl);  
+            } catch (storageErr) {  
+                // Ignore if image exceeds localStorage limit  
+            }  
+
+            showToast('تم إرفاق صورة الدرس بنجاح ✨');  
+        } catch (err) {  
+            showToast('تعذر تحميل الصورة، يرجى اختيار صورة أخرى من المعرض ⚠️');  
+        }  
+    }  
+
+    function removeUploadedImage() {  
+        uploadedImageBase64 = null;  
+        uploadedImageMime = 'image/jpeg';  
+        document.getElementById('gallery-image-input').value = '';  
+        document.getElementById('camera-image-input').value = '';  
+        document.getElementById('upload-placeholder').classList.remove('hidden');  
+        document.getElementById('image-preview-wrapper').classList.add('hidden');  
+        localStorage.removeItem('midad_draft_image');  
+    }  
+
+    function setInstruction(text) {  
+        document.getElementById('custom-instruction-input').value = text;  
+        autoSaveDraft();  
+    }  
+
+    function clearInputs() {  
+        document.getElementById('lesson-text-input').value = '';  
+        document.getElementById('custom-instruction-input').value = '';  
+        localStorage.removeItem('midad_draft_text');  
+        localStorage.removeItem('midad_draft_instruction');  
+        removeUploadedImage();  
+        showToast('تم تنظيف مساحة الإدخال ✨');  
+    }  
+
+    function selectPalette(paletteKey, btnElement) {  
+        currentPalette = paletteKey;  
+        document.querySelectorAll('.palette-btn').forEach(btn => {  
+            btn.classList.remove('border-midad-olive', 'border-midad-blushDeep', 'border-midad-sea', 'border-amber-600', 'bg-white', 'dark:bg-midad-darkBg', 'shadow-sm');  
+            btn.classList.add('border-transparent', 'bg-white/70', 'dark:bg-midad-darkBg/70');  
+        });  
+        btnElement.classList.remove('border-transparent', 'bg-white/70', 'dark:bg-midad-darkBg/70');  
+        btnElement.classList.add('border-midad-olive', 'bg-white', 'dark:bg-midad-darkBg', 'shadow-sm');  
+    }  
+
+    // 6. Generate Mind Map via Gemini API with Timeout & Robust JSON Parsing  
+    async function generateMindMap() {  
+        const lessonText = document.getElementById('lesson-text-input').value.trim();  
+        const customInstruction = document.getElementById('custom-instruction-input').value.trim();  
+
+        if (!lessonText && !uploadedImageBase64) {  
+            showToast('من فضلك ارفع صورة الدرس من المعرض أو اكتب نصاً أولاً 🖼️✍️');  
+            return;  
+    // 6. Generate Mind Map via Gemini API (Clean Payload + Safe JSON Extraction)  
+    async function generateMindMap() {  
+        const lessonText = document.getElementById('lesson-text-input').value.trim();  
+        const customInstruction = document.getElementById('custom-instruction-input').value.trim();  
+
+        if (!lessonText && !uploadedImageBase64) {  
+            showToast('من فضلك ارفع صورة الدرس من المعرض أو اكتب نصاً أولاً 🖼️✍️');  
+            return;  
+        }  
+
+        const loadingEl = document.getElementById('loading-state');  
+        const resultEl = document.getElementById('mindmap-result-section');  
+        const generateBtn = document.getElementById('generate-btn');  
+
+        loadingEl.classList.remove('hidden');  
+        resultEl.classList.add('hidden');  
+        generateBtn.disabled = true;  
+        generateBtn.classList.add('opacity-60');  
+
+        const systemPrompt = `أنت مساعد تعليمي عربي خبير في تصميم الخرائط الذهنية (Mind Maps) للطلاب بأسلوب بصري مبسط ومركز.
+
 مهمتك: قراءة محتوى الدرس من الصورة أو النص المرفق بدقة، وتطبيق توجيهات الطالب.
 قواعد الإخراج الإلزامية:
+
 - أرجع كائن JSON صالح فقط بدون أي نص إضافي قبله أو بعده.
+
 - ضع الكلمات المفتاحية والمصطلحات العلمية الهامة داخل قوسين مزدوجين هكذا [[الكلمة المفتاحية]] ليتم تسطيرها وتلوينها تلقائياً للطالب.
+
 - اتبع هذا الهيكل بالضبط:
-{
+  {
   "title": "عنوان الدرس الرئيسي",
   "summaryNote": "خلاصة مركزة للدرس في سطرين",
   "branches": [
-    {
-      "heading": "عنوان الفرع",
-      "colorTheme": "olive",
-      "points": ["نقطة 1 مع [[كلمة مفتاحية]]", "نقطة 2"],
-      "focusTip": "نصيحة ذهبية للتركيز في الامتحان حول هذا الفرع"
-    }
+  {
+  "heading": "عنوان الفرع",
+  "colorTheme": "olive",
+  "points": ["نقطة 1 مع [[كلمة مفتاحية]]", "نقطة 2"],
+  "focusTip": "نصيحة ذهبية للتركيز في الامتحان حول هذا الفرع"
+  }
   ]
-}
-ملاحظة: اجعل عدد الفروع من 3 إلى 6 فروع، واستخدم للقيمة colorTheme إحدى القيم: olive, ocean, sky, chocolate, blush.`;
+  }
+  ملاحظة: اجعل عدد الفروع من 3 إلى 6 فروع، واستخدم للقيمة colorTheme إحدى القيم: olive, ocean, sky, chocolate, blush.`;
 
-            const userPrompt = `لخّص هذا الدرس في شكل خريطة ذهنية منظمة وجميلة باللغة العربية بصيغة JSON فقط.
-${customInstruction ? `تعليمات الطالب الخاصة: ${customInstruction}` : ''}
-${lessonText ? `نص الدرس:\n${lessonText}` : 'يرجى قراءة محتوى الدرس من الصورة المرفقة بدقة واستخراج الخريطة الذهنية منه.'}`;
+  const userPrompt = `لخّص هذا الدرس في شكل خريطة ذهنية منظمة وجميلة باللغة العربية بصيغة JSON فقط.
 
-            const parts = [{ text: userPrompt }];
-            if (uploadedImageBase64) {
-                parts.push({
-                    inlineData: {
-                        mimeType: uploadedImageMime,
-                        data: uploadedImageBase64
-                    }
-                });
-            }
+${customInstruction ? تعليمات الطالب الخاصة: ${customInstruction} : ''}
+${lessonText ? نص الدرس:\n${lessonText} : 'يرجى قراءة محتوى الدرس من الصورة المرفقة بدقة واستخراج الخريطة الذهنية منه.'}`;
 
-            const payload = {
-                contents: [{ role: "user", parts: parts }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
-            };
+const parts = [{ text: userPrompt }];  
+        if (uploadedImageBase64) {  
+            parts.push({  
+                inlineData: {  
+                    mimeType: uploadedImageMime,  
+                    data: uploadedImageBase64  
+                }  
+            });  
+        }  
 
-            try {
-                const data = await fetchWithTimeoutAndRetry(
-                    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
-                    payload,
-                    2,
-                    45000
-                );
+        const payload = {  
+            contents: [{ role: "user", parts: parts }],  
+            systemInstruction: { parts: [{ text: systemPrompt }] }  
+        };  
 
-                const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!rawText) {
-                    throw new Error("لم يتم استلام محتوى من الخادم");
-                }
+        try {  
+            const data = await fetchWithTimeoutAndRetry(  
+                `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,  
+                payload,  
+                2,  
+                45000  
+            );  
 
-                // Extract JSON object safely even if wrapped in markdown fences
-                const firstBrace = rawText.indexOf('{');
-                const lastBrace = rawText.lastIndexOf('}');
-                if (firstBrace === -1 || lastBrace === -1) {
-                    throw new Error("تنسيق الاستجابة غير صالح");
-                }
-                const jsonString = rawText.slice(firstBrace, lastBrace + 1);
-                const parsedMap = JSON.parse(jsonString);
+            const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;  
+            if (!rawText) {  
+                throw new Error("لم يتم استلام محتوى من الخادم");  
+            }  
 
-                if (!parsedMap.branches || !Array.isArray(parsedMap.branches) || parsedMap.branches.length === 0) {
-                    throw new Error("بنية الخريطة غير مكتملة");
-                }
+            // Extract JSON object safely even if wrapped in markdown fences  
+            const firstBrace = rawText.indexOf('{');  
+            const lastBrace = rawText.lastIndexOf('}');  
+            if (firstBrace === -1 || lastBrace === -1) {  
+                throw new Error("تنسيق الاستجابة غير صالح");  
+            }  
+            const jsonString = rawText.slice(firstBrace, lastBrace + 1);  
+            const parsedMap = JSON.parse(jsonString);  
 
-                renderMindMap(parsedMap);
-                showToast('تم رسم خريطتك الذهنية بنجاح! 🌟');
-            } catch (err) {
-                showToast('تعذر الاتصال بالخادم حالياً، يرجى إعادة المحاولة بعد لحظات 🔄');
-            } finally {
-                loadingEl.classList.add('hidden');
-                generateBtn.disabled = false;
-                generateBtn.classList.remove('opacity-60');
-            }
-        }
+            if (!parsedMap.branches || !Array.isArray(parsedMap.branches) || parsedMap.branches.length === 0) {  
+                throw new Error("بنية الخريطة غير مكتملة");  
+            }  
 
-        async function fetchWithTimeoutAndRetry(url, payload, maxRetries = 2, timeoutMs = 45000) {
-            let delay = 1000;
-            for (let attempt = 0; attempt <= maxRetries; attempt++) {
-                const controller = new AbortController();
-                const timer = setTimeout(() => controller.abort(), timeoutMs);
+            renderMindMap(parsedMap);  
+            showToast('تم رسم خريطتك الذهنية بنجاح! 🌟');  
+        } catch (err) {  
+            showToast('تعذر الاتصال بالخادم حالياً، يرجى إعادة المحاولة بعد لحظات 🔄');  
+        } finally {  
+            loadingEl.classList.add('hidden');  
+            generateBtn.disabled = false;  
+            generateBtn.classList.remove('opacity-60');  
+        }  
+    }  
 
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
-                        signal: controller.signal
-                    });
-                    clearTimeout(timer);
+    async function fetchWithTimeoutAndRetry(url, payload, maxRetries = 2, timeoutMs = 45000) {  
+        let delay = 1000;  
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {  
+            const controller = new AbortController();  
+            const timer = setTimeout(() => controller.abort(), timeoutMs);  
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-                    return await response.json();
-                } catch (err) {
-                    clearTimeout(timer);
-                    if (attempt === maxRetries) throw err;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
-            }
-        }
+            try {  
+                const response = await fetch(url, {  
+                    method: 'POST',  
+                    headers: { 'Content-Type': 'application/json' },  
+                    body: JSON.stringify(payload),  
+                    signal: controller.signal  
+                });  
+                clearTimeout(timer);  
 
-        // 7. Render Visual Mind Map Board
-        function renderMindMap(mapData) {
-            const todayStr = new Date().toLocaleDateString('ar-DZ', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+                if (!response.ok) {  
+                    throw new Error(`HTTP ${response.status}`);  
+                }  
+                return await response.json();  
+            } catch (err) {  
+                clearTimeout(timer);  
+                if (attempt === maxRetries) throw err;  
+                await new Promise(res => setTimeout(res, delay));  
+                delay *= 2;  
+            }  
+        }  
+    }  
 
-            currentGeneratedMap = {
-                id: mapData.id || Date.now(),
-                date: mapData.date || todayStr,
-                palette: currentPalette,
-                ...mapData
-            };
+    // 7. Render Visual Mind Map Board  
+    function renderMindMap(mapData) {  
+        const todayStr = new Date().toLocaleDateString('ar-DZ', {  
+            year: 'numeric',  
+            month: 'long',  
+            day: 'numeric'  
+        });  
 
-            document.getElementById('map-date-stamp').textContent = currentGeneratedMap.date;
-            document.getElementById('map-main-title').textContent = mapData.title || 'ملخص الدرس';
-            document.getElementById('map-central-summary').textContent = mapData.summaryNote || '';
-            if (mapData.summaryNote) {
-                document.getElementById('map-encouragement-sub').textContent = mapData.summaryNote;
-            }
+        currentGeneratedMap = {  
+            id: mapData.id || Date.now(),  
+            date: mapData.date || todayStr,  
+            palette: currentPalette,  
+            ...mapData  
+        };  
 
-            // Apply Selected Palette to Central Node
-            const centralCard = document.getElementById('central-node-card');
-            const paletteGradients = {
-                nature: 'from-midad-sea to-midad-olive',
-                blush: 'from-midad-chocolate to-midad-blushDeep',
-                sea: 'from-midad-sea to-sky-500',
-                royal: 'from-stone-900 via-midad-olive to-midad-chocolate'
-            };
-            centralCard.className = `max-w-2xl w-full rounded-ios-xl p-6 sm:p-7 bg-gradient-to-br ${paletteGradients[currentPalette] || paletteGradients.nature} text-white shadow-xl border-4 border-white dark:border-midad-darkElevated`;
+        document.getElementById('map-date-stamp').textContent = currentGeneratedMap.date;  
+        document.getElementById('map-main-title').textContent = mapData.title || 'ملخص الدرس';  
+        document.getElementById('map-central-summary').textContent = mapData.summaryNote || '';  
+        if (mapData.summaryNote) {  
+            document.getElementById('map-encouragement-sub').textContent = mapData.summaryNote;  
+        }  
 
-            const container = document.getElementById('map-branches-container');
-            container.innerHTML = '';
+        // Apply Selected Palette to Central Node  
+        const centralCard = document.getElementById('central-node-card');  
+        const paletteGradients = {  
+            nature: 'from-midad-sea to-midad-olive',  
+            blush: 'from-midad-chocolate to-midad-blushDeep',  
+            sea: 'from-midad-sea to-sky-500',  
+            royal: 'from-stone-900 via-midad-olive to-midad-chocolate'  
+        };  
+        centralCard.className = `max-w-2xl w-full rounded-ios-xl p-6 sm:p-7 bg-gradient-to-br ${paletteGradients[currentPalette] || paletteGradients.nature} text-white shadow-xl border-4 border-white dark:border-midad-darkElevated`;  
 
-            const themeStyles = {
-                olive: {
-                    border: 'border-midad-olive/45 dark:border-midad-olive',
-                    badge: 'bg-midad-olive text-white',
-                    focusBg: 'bg-midad-olive/10 dark:bg-midad-olive/20 text-midad-olive dark:text-emerald-300',
-                    icon: '🌿'
-                },
-                ocean: {
-                    border: 'border-midad-sea/45 dark:border-midad-sky/50',
-                    badge: 'bg-midad-sea text-white',
-                    focusBg: 'bg-midad-sea/10 dark:bg-midad-sky/15 text-midad-sea dark:text-midad-sky',
-                    icon: '🌊'
-                },
-                sky: {
-                    border: 'border-sky-400/50 dark:border-sky-400/40',
-                    badge: 'bg-sky-600 text-white',
-                    focusBg: 'bg-sky-500/10 dark:bg-sky-400/15 text-sky-800 dark:text-sky-200',
-                    icon: '☁️'
-                },
-                chocolate: {
-                    border: 'border-midad-chocolate/35 dark:border-amber-700/60',
-                    badge: 'bg-midad-chocolate text-white',
-                    focusBg: 'bg-midad-chocolate/10 dark:bg-amber-900/25 text-midad-chocolate dark:text-amber-200',
-                    icon: '🍫'
-                },
-                blush: {
-                    border: 'border-midad-blushDeep/60 dark:border-midad-blush/40',
-                    badge: 'bg-midad-blushDeep text-white',
-                    focusBg: 'bg-midad-blush/35 dark:bg-midad-blush/15 text-midad-chocolate dark:text-midad-blush',
-                    icon: '🌸'
-                }
-            };
+        const container = document.getElementById('map-branches-container');  
+        container.innerHTML = '';  
 
-            const themeKeys = ['olive', 'ocean', 'blush', 'sky', 'chocolate'];
+        const themeStyles = {  
+            olive: {  
+                border: 'border-midad-olive/45 dark:border-midad-olive',  
+                badge: 'bg-midad-olive text-white',  
+                focusBg: 'bg-midad-olive/10 dark:bg-midad-olive/20 text-midad-olive dark:text-emerald-300',  
+                icon: '🌿'  
+            },  
+            ocean: {  
+                border: 'border-midad-sea/45 dark:border-midad-sky/50',  
+                badge: 'bg-midad-sea text-white',  
+                focusBg: 'bg-midad-sea/10 dark:bg-midad-sky/15 text-midad-sea dark:text-midad-sky',  
+                icon: '🌊'  
+            },  
+            sky: {  
+                border: 'border-sky-400/50 dark:border-sky-400/40',  
+                badge: 'bg-sky-600 text-white',  
+                focusBg: 'bg-sky-500/10 dark:bg-sky-400/15 text-sky-800 dark:text-sky-200',  
+                icon: '☁️'  
+            },  
+            chocolate: {  
+                border: 'border-midad-chocolate/35 dark:border-amber-700/60',  
+                badge: 'bg-midad-chocolate text-white',  
+                focusBg: 'bg-midad-chocolate/10 dark:bg-amber-900/25 text-midad-chocolate dark:text-amber-200',  
+                icon: '🍫'  
+            },  
+            blush: {  
+                border: 'border-midad-blushDeep/60 dark:border-midad-blush/40',  
+                badge: 'bg-midad-blushDeep text-white',  
+                focusBg: 'bg-midad-blush/35 dark:bg-midad-blush/15 text-midad-chocolate dark:text-midad-blush',  
+                icon: '🌸'  
+            }  
+        };  
 
-            (mapData.branches || []).forEach((branch, index) => {
-                const chosenThemeKey = themeStyles[branch.colorTheme] ? branch.colorTheme : themeKeys[index % themeKeys.length];
-                const style = themeStyles[chosenThemeKey];
+        const themeKeys = ['olive', 'ocean', 'blush', 'sky', 'chocolate'];  
 
-                const pointsHtml = (branch.points || []).map(pt => {
-                    const formattedPt = highlightKeywords(pt, index);
-                    return `
-                        <li class="flex items-start gap-2.5 text-sm font-semibold text-midad-chocolate/90 dark:text-stone-200 leading-relaxed">
-                            <span class="w-2 h-2 rounded-full bg-midad-olive dark:bg-midad-sky mt-2 shrink-0"></span>
-                            <span>${formattedPt}</span>
-                        </li>
-                    `;
-                }).join('');
+        (mapData.branches || []).forEach((branch, index) => {  
+            const chosenThemeKey = themeStyles[branch.colorTheme] ? branch.colorTheme : themeKeys[index % themeKeys.length];  
+            const style = themeStyles[chosenThemeKey];  
 
-                const focusHtml = branch.focusTip ? `
-                    <div class="mt-4 pt-3 border-t border-midad-chocolate/10 dark:border-white/10">
-                        <div class="rounded-2xl p-3 ${style.focusBg} text-xs font-extrabold leading-relaxed flex items-start gap-2">
-                            <span class="shrink-0">🎯</span>
-                            <span>عليمن تركز: ${highlightKeywords(branch.focusTip, index + 1)}</span>
-                        </div>
-                    </div>
-                ` : '';
+            const pointsHtml = (branch.points || []).map(pt => {  
+                const formattedPt = highlightKeywords(pt, index);  
+                return `  
+                    <li class="flex items-start gap-2.5 text-sm font-semibold text-midad-chocolate/90 dark:text-stone-200 leading-relaxed">  
+                        <span class="w-2 h-2 rounded-full bg-midad-olive dark:bg-midad-sky mt-2 shrink-0"></span>  
+                        <span>${formattedPt}</span>  
+                    </li>  
+                `;  
+            }).join('');  
 
-                const cardHtml = `
-                    <div class="rounded-ios-lg bg-white/95 dark:bg-midad-darkElevated/95 border-2 ${style.border} p-5 shadow-ios hover:shadow-ios-hover transition-all flex flex-col justify-between space-y-3">
-                        <div class="space-y-3.5">
-                            <div class="flex items-center gap-3">
-                                <span class="w-9 h-9 rounded-2xl ${style.badge} flex items-center justify-center text-base shadow-sm shrink-0">
-                                    ${style.icon}
-                                </span>
-                                <h4 class="font-black text-base text-midad-chocolate dark:text-white leading-snug">
-                                    ${branch.heading}
-                                </h4>
-                            </div>
-                            <ul class="space-y-2.5">
-                                ${pointsHtml}
-                            </ul>
-                        </div>
-                        ${focusHtml}
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', cardHtml);
-            });
+            const focusHtml = branch.focusTip ? `  
+                <div class="mt-4 pt-3 border-t border-midad-chocolate/10 dark:border-white/10">  
+                    <div class="rounded-2xl p-3 ${style.focusBg} text-xs font-extrabold leading-relaxed flex items-start gap-2">  
+                        <span class="shrink-0">🎯</span>  
+                        <span>عليمن تركز: ${highlightKeywords(branch.focusTip, index + 1)}</span>  
+                    </div>  
+                </div>  
+            ` : '';  
 
-            const resultSection = document.getElementById('mindmap-result-section');
-            resultSection.classList.remove('hidden');
-            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+            const cardHtml = `  
+                <div class="rounded-ios-lg bg-white/95 dark:bg-midad-darkElevated/95 border-2 ${style.border} p-5 shadow-ios hover:shadow-ios-hover transition-all flex flex-col justify-between space-y-3">  
+                    <div class="space-y-3.5">  
+                        <div class="flex items-center gap-3">  
+                            <span class="w-9 h-9 rounded-2xl ${style.badge} flex items-center justify-center text-base shadow-sm shrink-0">  
+                                ${style.icon}  
+                            </span>  
+                            <h4 class="font-black text-base text-midad-chocolate dark:text-white leading-snug">  
+                                ${branch.heading}  
+                            </h4>  
+                        </div>  
+                        <ul class="space-y-2.5">  
+                            ${pointsHtml}  
+                        </ul>  
+                    </div>  
+                    ${focusHtml}  
+                </div>  
+            `;  
+            container.insertAdjacentHTML('beforeend', cardHtml);  
+        });  
 
-        // Format [[keyword]] into underlined blush/sky badges
-        function highlightKeywords(text, branchIndex) {
-            const cls = branchIndex % 2 === 0 ? 'keyword-blush' : 'keyword-sky';
-            return String(text).replace(/\[\[(.*?)\]\]/g, `<span class="${cls}">$1</span>`);
-        }
+        const resultSection = document.getElementById('mindmap-result-section');  
+        resultSection.classList.remove('hidden');  
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });  
+    }  
 
-        // 8. Save to Student Journal (يومياتي وسلتي)
-        function saveCurrentMapToJournal() {
-            if (!currentGeneratedMap) return;
-            const exists = savedJournal.some(item => item.id === currentGeneratedMap.id);
-            if (exists) {
-                showToast('هذه الخريطة محفوظة مسبقاً في يومياتك 🗂️');
-                return;
-            }
-            savedJournal.unshift(currentGeneratedMap);
-            localStorage.setItem('midad_student_journal', JSON.stringify(savedJournal));
-            updateJournalBadges();
-            showToast('تم حفظ الخريطة في يومياتك بنجاح! 🎉🗂️');
-        }
+    // Format [[keyword]] into underlined blush/sky badges  
+    function highlightKeywords(text, branchIndex) {  
+        const cls = branchIndex % 2 === 0 ? 'keyword-blush' : 'keyword-sky';  
+        return String(text).replace(/\[(.*?)\]/g, `<span class="${cls}">$1</span>`);  
+    }  
 
-        function renderJournal() {
-            const grid = document.getElementById('journal-grid');
-            const emptyState = document.getElementById('journal-empty-state');
-            grid.innerHTML = '';
+    // 8. Save to Student Journal (يومياتي وسلتي)  
+    function saveCurrentMapToJournal() {  
+        if (!currentGeneratedMap) return;  
+        const exists = savedJournal.some(item => item.id === currentGeneratedMap.id);  
+        if (exists) {  
+            showToast('هذه الخريطة محفوظة مسبقاً في يومياتك 🗂️');  
+            return;  
+        }  
+        savedJournal.unshift(currentGeneratedMap);  
+        localStorage.setItem('midad_student_journal', JSON.stringify(savedJournal));  
+        updateJournalBadges();  
+        showToast('تم حفظ الخريطة في يومياتك بنجاح! 🎉🗂️');  
+    }  
 
-            if (savedJournal.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            emptyState.classList.add('hidden');
+    function renderJournal() {  
+        const grid = document.getElementById('journal-grid');  
+        const emptyState = document.getElementById('journal-empty-state');  
+        grid.innerHTML = '';  
 
-            savedJournal.forEach((item, idx) => {
-                const card = `
-                    <div class="ios-glass rounded-ios-xl p-6 shadow-ios hover:shadow-ios-hover transition-all flex flex-col justify-between space-y-4 border border-white/80 dark:border-white/10">
-                        <div class="space-y-2.5">
-                            <div class="flex items-center justify-between gap-2">
-                                <span class="px-3 py-1 rounded-full bg-midad-sky/25 text-midad-sea dark:text-midad-sky text-[11px] font-extrabold">
-                                    📅 ${item.date}
-                                </span>
-                                <button onclick="deleteJournalItem(${idx})" title="حذف من اليوميات" class="w-8 h-8 rounded-full bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white flex items-center justify-center text-xs transition-colors">
-                                    ✕
-                                </button>
-                            </div>
-                            <h4 class="text-lg font-black text-midad-chocolate dark:text-white line-clamp-2">
-                                ${item.title}
-                            </h4>
-                            <p class="text-xs text-midad-chocolate/70 dark:text-stone-300 line-clamp-2 leading-relaxed">
-                                ${item.summaryNote || ''}
-                            </p>
-                        </div>
+        if (savedJournal.length === 0) {  
+            emptyState.classList.remove('hidden');  
+            return;  
+        }  
+        emptyState.classList.add('hidden');  
 
-                        <div class="pt-3 border-t border-midad-chocolate/10 dark:border-white/10 flex items-center justify-between">
-                            <span class="text-xs font-bold text-midad-olive dark:text-emerald-300">
-                                ${(item.branches || []).length} فروع رئيسية 🌿
-                            </span>
-                            <button onclick="openSavedMap(${idx})" class="px-4 py-2 rounded-full bg-midad-chocolate text-white dark:bg-midad-sea text-xs font-extrabold hover:opacity-90 transition-all">
-                                فتح الخريطة ←
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.insertAdjacentHTML('beforeend', card);
-            });
-        }
+        savedJournal.forEach((item, idx) => {  
+            const card = `  
+                <div class="ios-glass rounded-ios-xl p-6 shadow-ios hover:shadow-ios-hover transition-all flex flex-col justify-between space-y-4 border border-white/80 dark:border-white/10">  
+                    <div class="space-y-2.5">  
+                        <div class="flex items-center justify-between gap-2">  
+                            <span class="px-3 py-1 rounded-full bg-midad-sky/25 text-midad-sea dark:text-midad-sky text-[11px] font-extrabold">  
+                                📅 ${item.date}  
+                            </span>  
+                            <button onclick="deleteJournalItem(${idx})" title="حذف من اليوميات" class="w-8 h-8 rounded-full bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white flex items-center justify-center text-xs transition-colors">  
+                                ✕  
+                            </button>  
+                        </div>  
+                        <h4 class="text-lg font-black text-midad-chocolate dark:text-white line-clamp-2">  
+                            ${item.title}  
+                        </h4>  
+                        <p class="text-xs text-midad-chocolate/70 dark:text-stone-300 line-clamp-2 leading-relaxed">  
+                            ${item.summaryNote || ''}  
+                        </p>  
+                    </div>  
 
-        function openSavedMap(index) {
-            const item = savedJournal[index];
-            if (!item) return;
-            currentPalette = item.palette || 'nature';
-            switchTab('create');
-            renderMindMap(item);
-            showToast('تم فتح الخريطة من يومياتك 📖✨');
-        }
+                    <div class="pt-3 border-t border-midad-chocolate/10 dark:border-white/10 flex items-center justify-between">  
+                        <span class="text-xs font-bold text-midad-olive dark:text-emerald-300">  
+                            ${(item.branches || []).length} فروع رئيسية 🌿  
+                        </span>  
+                        <button onclick="openSavedMap(${idx})" class="px-4 py-2 rounded-full bg-midad-chocolate text-white dark:bg-midad-sea text-xs font-extrabold hover:opacity-90 transition-all">  
+                            فتح الخريطة ←  
+                        </button>  
+                    </div>  
+                </div>  
+            `;  
+            grid.insertAdjacentHTML('beforeend', card);  
+        });  
+    }  
 
-        function deleteJournalItem(index) {
-            savedJournal.splice(index, 1);
-            localStorage.setItem('midad_student_journal', JSON.stringify(savedJournal));
-            updateJournalBadges();
-            renderJournal();
-            showToast('تم حذف الملخص من اليوميات 🗑️');
-        }
+    function openSavedMap(index) {  
+        const item = savedJournal[index];  
+        if (!item) return;  
+        currentPalette = item.palette || 'nature';  
+        switchTab('create');  
+        renderMindMap(item);  
+        showToast('تم فتح الخريطة من يومياتك 📖✨');  
+    }  
 
-        // 9. Export Mind Map as High-Resolution PNG via html2canvas
-        async function downloadMindMapAsImage() {
-            const boardEl = document.getElementById('mindmap-board');
-            if (!boardEl || !currentGeneratedMap) return;
+    function deleteJournalItem(index) {  
+        savedJournal.splice(index, 1);  
+        localStorage.setItem('midad_student_journal', JSON.stringify(savedJournal));  
+        updateJournalBadges();  
+        renderJournal();  
+        showToast('تم حذف الملخص من اليوميات 🗑️');  
+    }  
 
-            showToast('جاري تجهيز صورة خريطتك الذهنية بجودة عالية... 🎨');
+    // 9. Export Mind Map as High-Resolution PNG via html2canvas  
+    async function downloadMindMapAsImage() {  
+        const boardEl = document.getElementById('mindmap-board');  
+        if (!boardEl || !currentGeneratedMap) return;  
 
-            try {
-                if (typeof html2canvas !== 'undefined') {
-                    const isDark = document.documentElement.classList.contains('dark');
-                    const canvas = await html2canvas(boardEl, {
-                        scale: 2,
-                        useCORS: true,
-                        backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
-                        logging: false
-                    });
-                    const link = document.createElement('a');
-                    link.download = `خريطة-مداد-${Date.now()}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                    showToast('تم تحميل الخريطة الذهنية كصورة PNG في جهازك! 📥🖼️');
-                }
-            } catch (error) {
-                showToast('تعذّر تصدير الصورة حالياً، يمكنك أخذ لقطة شاشة مباشرة 📸');
-            }
-        }
+        showToast('جاري تجهيز صورة خريطتك الذهنية بجودة عالية... 🎨');  
 
-        // Custom Toast Notification
-        let toastTimer = null;
-        function showToast(message) {
-            const box = document.getElementById('toast-box');
-            const textEl = document.getElementById('toast-text');
-            textEl.textContent = message;
-            box.classList.remove('hidden');
-            box.classList.add('flex');
+        try {  
+            if (typeof html2canvas !== 'undefined') {  
+                const isDark = document.documentElement.classList.contains('dark');  
+                const canvas = await html2canvas(boardEl, {  
+                    scale: 2,  
+                    useCORS: true,  
+                    backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',  
+                    logging: false  
+                });  
+                const link = document.createElement('a');  
+                link.download = `خريطة-مداد-${Date.now()}.png`;  
+                link.href = canvas.toDataURL('image/png');  
+                link.click();  
+                showToast('تم تحميل الخريطة الذهنية كصورة PNG في جهازك! 📥🖼️');  
+            }  
+        } catch (error) {  
+            showToast('تعذّر تصدير الصورة حالياً، يمكنك أخذ لقطة شاشة مباشرة 📸');  
+        }  
+    }  
 
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => {
-                box.classList.add('hidden');
-                box.classList.remove('flex');
-            }, 3800);
-        }
-    </script>
-</body>
+    // Custom Toast Notification  
+    let toastTimer = null;  
+    function showToast(message) {  
+        const box = document.getElementById('toast-box');  
+        const textEl = document.getElementById('toast-text');  
+        textEl.textContent = message;  
+        box.classList.remove('hidden');  
+        box.classList.add('flex');  
+
+        clearTimeout(toastTimer);  
+        toastTimer = setTimeout(() => {  
+            box.classList.add('hidden');  
+            box.classList.remove('flex');  
+        }, 3800);  
+    }  
+</script>
+
+</body>  
 </html>
